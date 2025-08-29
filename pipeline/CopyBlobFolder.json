@@ -1,0 +1,42 @@
+{
+  "name": "CopyBlobFolder",
+  "properties": {
+    "activities": [
+      {
+        "name": "CopyInputToProcessed",
+        "type": "Copy",
+        "dependsOn": [],
+        "policy": {
+          "timeout": "7.00:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "source": {
+            "type": "BinarySource"
+          },
+          "sink": {
+            "type": "BinarySink"
+          }
+        },
+        "inputs": [
+          {
+            "referenceName": "BlobInputDataset",
+            "type": "DatasetReference"
+          }
+        ],
+        "outputs": [
+          {
+            "referenceName": "BlobOutputDataset",
+            "type": "DatasetReference"
+          }
+        ]
+      }
+    ],
+    "annotations": [],
+    "lastPublishTime": "2025-08-29T12:30:00Z"
+  },
+  "type": "Microsoft.DataFactory/factories/pipelines"
+}
