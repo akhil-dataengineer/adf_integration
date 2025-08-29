@@ -1,0 +1,9 @@
+{
+	"name": "adf-with-copilot",
+	"location": "eastus2",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "5045a31e-3021-4c48-9d5c-1cdef889e29d",
+		"tenantId": "e55e9f72-ac55-436c-aa55-a40f0dc07184"
+	}
+}
