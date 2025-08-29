@@ -1,0 +1,19 @@
+{
+  "name": "BlobOutputDataset",
+  "properties": {
+    "linkedServiceName": {
+      "referenceName": "AzureBlobStorageLS",
+      "type": "LinkedServiceReference"
+    },
+    "type": "Binary",
+    "typeProperties": {
+      "location": {
+        "type": "AzureBlobStorageLocation",
+        "container": "social-media-analytics",
+        "folderPath": "processed",
+        "fileName": "emplifi_profile_metrics.csv"
+      }
+    }
+  },
+  "type": "Microsoft.DataFactory/factories/datasets"
+}
