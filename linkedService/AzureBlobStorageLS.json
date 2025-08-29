@@ -6,7 +6,7 @@
     "typeProperties": {
       "connectionString": {
         "type": "SecureString",
-        "value": "DefaultEndpointsProtocol=https;AccountName=aienablementstorage1;AccountKey=<YOUR_STORAGE_KEY>;EndpointSuffix=core.windows.net"
+        "value": "DefaultEndpointsProtocol=https;AccountName=aienablementstorage1;AccountKey=QIhpMhK6lzlA2trKESzZxW/x7gu13JeMNSrz8ZfpFrVE+dDd2bQ7gU3zylj46Sfr65SF80+0ocWW+ASt5jpSYw==;EndpointSuffix=core.windows.net"
       }
     },
     "annotations": []
