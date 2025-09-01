@@ -12,7 +12,7 @@
         "type": "AzureBlobStorageLocation",
         "container": "social-media-analytics",
         "folderPath": "silver",
-        "fileName": "*.parquet"
+        "fileName": "profile_metrics_silver.parquet"
       }
     }
   }
