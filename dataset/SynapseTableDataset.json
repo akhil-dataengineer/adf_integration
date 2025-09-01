@@ -6,7 +6,7 @@
       "referenceName": "AzureSynapseLS",
       "type": "LinkedServiceReference"
     },
-    "type": "AzureSqlDWTable",
+    "type": "AzureSqlTable",
     "typeProperties": {
       "tableName": "[dev].[profile_engagement_metrics]"
     }
