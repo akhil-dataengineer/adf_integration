@@ -1,15 +1,22 @@
 {
-	"name": "semrush_sql_table_dataset",
-	"properties": {
-		"linkedServiceName": {
-			"referenceName": "semrush_sql_linked_service",
-			"type": "LinkedServiceReference"
-		},
-		"annotations": [],
-		"type": "AzureSqlTable",
-		"typeProperties": {
-			"tableName": "dev.semrush_geo_distribution"
-		}
-	},
-	"type": "Microsoft.DataFactory/factories/datasets"
+  "name": "semrush_sql_table_dataset",
+  "type": "Microsoft.DataFactory/factories/datasets",
+  "properties": {
+    "linkedServiceName": {
+      "referenceName": "semrush_sql_linked_service",
+      "type": "LinkedServiceReference"
+    },
+    "parameters": {
+      "schema_name": {
+        "type": "string",
+        "defaultValue": "dev"
+      }
+    },
+    "type": "AzureSqlTable",
+    "typeProperties": {
+      "schema": "@dataset().schema_name",
+      "tableName": "semrush_geo_distribution"
+    },
+    "annotations": []
+  }
 }
