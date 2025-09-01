@@ -1,0 +1,14 @@
+{
+  "name": "SynapseTableDataset",
+  "type": "Microsoft.DataFactory/factories/datasets",
+  "properties": {
+    "linkedServiceName": {
+      "referenceName": "AzureSynapseLS",
+      "type": "LinkedServiceReference"
+    },
+    "type": "AzureSqlDWTable",
+    "typeProperties": {
+      "tableName": "[dev].[profile_engagement_metrics]"
+    }
+  }
+}
