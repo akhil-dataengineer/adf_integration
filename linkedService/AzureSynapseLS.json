@@ -4,8 +4,11 @@
   "properties": {
     "type": "AzureSqlDW",
     "typeProperties": {
-      "connectionString": "Server=tcp:sql-opr-adap-dev-eus.database.windows.net,1433;Database=syndwopradapdeveus;",
-      "authenticationType": "MSI"
+      "connectionString": "Server=tcp:sql-opr-adap-dev-eus.database.windows.net,1433;Database=syndwopradapdeveus;User ID=sqlAdmin;Password=Z1!xcvbmnmbvcxzz;"
+    },
+    "connectVia": {
+      "referenceName": "AutoResolveIntegrationRuntime",
+      "type": "IntegrationRuntimeReference"
     }
   }
 }
