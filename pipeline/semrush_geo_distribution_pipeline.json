@@ -1,82 +1,186 @@
 {
-  "name": "semrush_geo_distribution_pipeline",
-  "properties": {
-    "description": "Monthly SEMrush geo distribution data pipeline",
-    "parameters": {
-      "report_month": { "type": "String", "defaultValue": "" },
-      "root_folder": { "type": "String", "defaultValue": "semrush" },
-      "dbschema": { "type": "String", "defaultValue": "dev" },
-      "receiver_emails": { "type": "String", "defaultValue": "" },
-      "global_targets_view": { "type": "String", "defaultValue": "vw_semrush_global_targets" }
-    },
-    "variables": {
-      "report_month_date": { "type": "String" },
-      "path_postfix": { "type": "String" }
-    },
-    "activities": [
-      {
-        "name": "SetReportMonth",
-        "type": "SetVariable",
-        "typeProperties": {
-          "variableName": "report_month_date",
-          "value": {
-            "value": "@if(equals(pipeline().parameters.report_month, ''), formatDateTime(addMonths(utcnow(), -1), 'yyyy-MM'), pipeline().parameters.report_month)",
-            "type": "Expression"
-          }
-        }
-      },
-      {
-        "name": "SetPathPostfix",
-        "type": "SetVariable",
-        "dependsOn": [ { "activity": "SetReportMonth", "dependencyConditions": [ "Succeeded" ] } ],
-        "typeProperties": {
-          "variableName": "path_postfix",
-          "value": {
-            "value": "@concat(pipeline().parameters.root_folder, '/geo_distribution/', variables('report_month_date'))",
-            "type": "Expression"
-          }
-        }
-      },
-      {
-        "name": "RunDatabricksNotebook",
-        "type": "DatabricksNotebook",
-        "dependsOn": [ { "activity": "SetPathPostfix", "dependencyConditions": [ "Succeeded" ] } ],
-        "linkedServiceName": { "referenceName": "semrush_databricks_linked_service", "type": "LinkedServiceReference" },
-        "typeProperties": {
-          "notebookPath": "/Users/ryarapatineni@intuceo.com/.bundle/databricks_test/dev/files/usagm_databricks_test/src/semrush_geo_distribution",
-          "existingClusterId": "0826-180150-a3kduvi8o",
-          "baseParameters": {
-            "report_month": "@variables('report_month_date')",
-            "root_folder": "@pipeline().parameters.root_folder",
-            "dbschema": "@pipeline().parameters.dbschema",
-            "global_targets_view": "@pipeline().parameters.global_targets_view"
-          }
-        },
-        "policy": { "timeout": "01:00:00", "retry": 1, "retryIntervalInSeconds": 60 }
-      },
-      {
-        "name": "CopyParquetToSQL",
-        "type": "Copy",
-        "dependsOn": [ { "activity": "RunDatabricksNotebook", "dependencyConditions": [ "Succeeded" ] } ],
-        "inputs": [ { "referenceName": "semrush_adls_parquet_dataset", "type": "DatasetReference" } ],
-        "outputs": [ { "referenceName": "semrush_sql_table_dataset", "type": "DatasetReference" } ],
-        "typeProperties": {
-          "source": { 
-            "type": "ParquetSource",
-            "storeSettings": {
-              "type": "AzureBlobFSReadSettings",
-              "wildcardFileName": "*.parquet"
-            }
-          },
-          "sink": { "type": "SqlSink", "writeBatchSize": 10000, "tableOption": "autoCreate" },
-          "enableStaging": true,
-          "stagingSettings": {
-            "linkedServiceName": { "referenceName": "semrush_adls_linked_service", "type": "LinkedServiceReference" },
-            "path": "temp"
-          },
-          "enableAutoMapping": true
-        }
-      }
-    ]
-  }
+	"name": "semrush_geo_distribution_pipeline",
+	"properties": {
+		"description": "Monthly SEMrush geo distribution data pipeline",
+		"activities": [
+			{
+				"name": "SetReportMonth",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "report_month_date",
+					"value": {
+						"value": "@if(equals(pipeline().parameters.report_month, ''), formatDateTime(addMonths(utcnow(), -1), 'yyyy-MM'), pipeline().parameters.report_month)",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "SetPathPostfix",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "SetReportMonth",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "path_postfix",
+					"value": {
+						"value": "@concat(pipeline().parameters.root_folder, 'bronze/geo_distribution/', variables('report_month_date'))",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "RunDatabricksNotebook",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "SetPathPostfix",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "01:00:00",
+					"retry": 1,
+					"retryIntervalInSeconds": 60
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/ryarapatineni@intuceo.com/.bundle/databricks_test/dev/files/usagm_databricks_test/src/semrush_geo_distribution",
+					"baseParameters": {
+						"report_month": {
+							"value": "@variables('report_month_date')",
+							"type": "Expression"
+						},
+						"root_folder": {
+							"value": "@pipeline().parameters.root_folder",
+							"type": "Expression"
+						},
+						"dbschema": {
+							"value": "@pipeline().parameters.dbschema",
+							"type": "Expression"
+						},
+						"global_targets_view": {
+							"value": "@pipeline().parameters.global_targets_view",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "semrush_databricks_linked_service",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "CopyParquetToSQL",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "RunDatabricksNotebook",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "ParquetSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFileName": "*.parquet"
+						},
+						"formatSettings": {
+							"type": "ParquetReadSettings"
+						}
+					},
+					"sink": {
+						"type": "SqlSink",
+						"writeBatchSize": 10000,
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false,
+						"disableMetricsCollection": false
+					},
+					"enableStaging": true,
+					"stagingSettings": {
+						"linkedServiceName": {
+							"referenceName": "semrush_adls_linked_service",
+							"type": "LinkedServiceReference"
+						},
+						"path": "temp"
+					},
+					"enableAutoMapping": true
+				},
+				"inputs": [
+					{
+						"referenceName": "semrush_adls_parquet_dataset",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "semrush_sql_table_dataset",
+						"type": "DatasetReference",
+						"parameters": {
+							"schema_name": "dev"
+						}
+					}
+				]
+			}
+		],
+		"parameters": {
+			"report_month": {
+				"type": "String",
+				"defaultValue": "2025-08-01"
+			},
+			"root_folder": {
+				"type": "String",
+				"defaultValue": "semrush"
+			},
+			"dbschema": {
+				"type": "String",
+				"defaultValue": "dev"
+			},
+			"receiver_emails": {
+				"type": "String",
+				"defaultValue": "avenkataraju@intuco.com"
+			},
+			"global_targets_view": {
+				"type": "String",
+				"defaultValue": "vw_semrush_global_targets"
+			}
+		},
+		"variables": {
+			"report_month_date": {
+				"type": "String"
+			},
+			"path_postfix": {
+				"type": "String"
+			}
+		},
+		"annotations": []
+	}
 }
