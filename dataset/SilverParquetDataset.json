@@ -11,7 +11,8 @@
       "location": {
         "type": "AzureBlobFSLocation",
         "fileSystem": "social-media-analytics",
-        "folderPath": "silver/"
+        "folderPath": "silver",
+        "fileName": "*.parquet"
       }
     }
   }
