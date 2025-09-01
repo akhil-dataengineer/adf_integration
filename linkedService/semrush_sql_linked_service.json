@@ -1,0 +1,13 @@
+{
+  "name": "semrush_sql_linked_service",
+  "properties": {
+    "type": "AzureSqlDatabase",
+    "typeProperties": {
+      "connectionString": "Server=tcp:sql-opr-adap-dev-eus.database.windows.net,1433;Database=syndwopradapdeveus;User ID=sqlAdmin;Password=Z1!xcvbnmnbvcxzz;Encrypt=true;TrustServerCertificate=false;Connection Timeout=30;"
+    },
+    "connectVia": {
+      "referenceName": "AutoResolveIntegrationRuntime",
+      "type": "IntegrationRuntimeReference"
+    }
+  }
+}
