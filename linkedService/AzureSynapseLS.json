@@ -2,9 +2,10 @@
   "name": "AzureSynapseLS",
   "type": "Microsoft.DataFactory/factories/linkedservices",
   "properties": {
-    "type": "AzureSqlDW",
+    "description": "Synapse connection via SQL authentication",
+    "type": "AzureSqlDatabase",
     "typeProperties": {
-      "connectionString": "Server=tcp:sql-opr-adap-dev-eus.database.windows.net,1433;Database=syndwopradapdeveus;User ID=sqlAdmin;Password=Z1!xcvbmnmbvcxzz;"
+      "connectionString": "Server=tcp:sql-opr-adap-dev-eus.database.windows.net,1433;Initial Catalog=syndwopradapdeveus;User ID=sqlAdmin;Password=Z1!xcvbmnmbvcxzz;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
     },
     "connectVia": {
       "referenceName": "AutoResolveIntegrationRuntime",
