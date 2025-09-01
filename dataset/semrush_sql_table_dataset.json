@@ -1,0 +1,16 @@
+{
+  "name": "semrush_sql_table_dataset",
+  "type": "Microsoft.DataFactory/factories/datasets",
+  "properties": {
+    "linkedServiceName": {
+      "referenceName": "semrush_sql_linked_service",
+      "type": "LinkedServiceReference"
+    },
+    "type": "AzureSqlTable",
+    "typeProperties": {
+      "schema": "dev",
+      "tableName": "semrush_geo_distribution"
+    },
+    "annotations": []
+  }
+}
