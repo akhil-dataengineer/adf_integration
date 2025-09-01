@@ -4,10 +4,8 @@
   "properties": {
     "type": "AzureSqlDW",
     "typeProperties": {
-      "connectionString": {
-        "type": "SecureString",
-        "value": "Server=tcp:sql-opr-adap-dev-eus.database.windows.net,1433;Database=syndwopradapdeveus;Authentication=ActiveDirectoryMSI"
-      }
+      "connectionString": "Server=tcp:sql-opr-adap-dev-eus.database.windows.net,1433;Database=syndwopradapdeveus;",
+      "authenticationType": "MSI"
     }
   }
 }
