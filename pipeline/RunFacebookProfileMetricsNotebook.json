@@ -14,7 +14,7 @@
           "secureInput": false
         },
         "typeProperties": {
-          "notebookPath": "/Users/ryarapatineni@intuceo.com/.bundle/databricks_test/dev/files/usagm_databricks_test/facebook_profile_metrics",
+          "notebookPath": "/Users/ryarapatineni@intuceo.com/.bundle/databricks_test/dev/files/usagm_databricks_test/src/facebook_profile_metrics",
           "baseParameters": {}
         },
         "linkedServiceName": {
