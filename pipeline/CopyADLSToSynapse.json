@@ -15,15 +15,15 @@
         },
         "typeProperties": {
           "source": {
-            "type": "ParquetSource"
+            "type": "DelimitedTextSource"
           },
           "sink": {
-            "type": "SqlDWSink"
+            "type": "SqlSink"
           }
         },
         "inputs": [
           {
-            "referenceName": "SilverParquetDataset",
+            "referenceName": "SilverCsvDataset",
             "type": "DatasetReference"
           }
         ],
