@@ -9,8 +9,8 @@
     "type": "Parquet",
     "typeProperties": {
       "location": {
-        "type": "AzureBlobFSLocation",
-        "fileSystem": "social-media-analytics",
+        "type": "AzureBlobStorageLocation",
+        "container": "social-media-analytics",
         "folderPath": "silver",
         "fileName": "*.parquet"
       }
