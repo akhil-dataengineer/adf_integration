@@ -1,21 +1,19 @@
 {
   "name": "RunFacebookProfileMetricsNotebook",
-  "type": "DatabricksNotebook",
-  "dependsOn": [],
-  "policy": {
-    "timeout": "7.00:00:00",
-    "retry": 0,
-    "retryIntervalInSeconds": 30,
-    "secureOutput": false,
-    "secureInput": false
-  },
-  "typeProperties": {
-    "notebookPath": "/Users/ryarapatineni@intuceo.com/src/facebook_profile_metrics.py", 
-    "baseParameters": {}
-  },
-  "linkedServiceName": {
-    "referenceName": "AzureDatabricksLS",
-    "type": "LinkedServiceReference"
+  "properties": {
+    "activities": [
+      {
+        "name": "RunDatabricksNotebook",
+        "type": "DatabricksNotebook",
+        "typeProperties": {
+          "notebookPath": "/Users/ryarapatineni@intuceo.com/src/facebook_profile_metrics.py",
+          "baseParameters": {}
+        },
+        "linkedServiceName": {
+          "referenceName": "AzureDatabricksLS",
+          "type": "LinkedServiceReference"
+        }
+      }
+    ]
   }
 }
-
