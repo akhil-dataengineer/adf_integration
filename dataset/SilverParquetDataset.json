@@ -1,19 +1,21 @@
 {
-  "name": "SilverParquetDataset",
+  "name": "SilverCsvDataset",
   "type": "Microsoft.DataFactory/factories/datasets",
   "properties": {
     "linkedServiceName": {
       "referenceName": "AzureBlobStorageLS",
       "type": "LinkedServiceReference"
     },
-    "type": "Parquet",
+    "type": "DelimitedText",
     "typeProperties": {
       "location": {
         "type": "AzureBlobStorageLocation",
         "container": "social-media-analytics",
         "folderPath": "silver",
-        "fileName": "profile_metrics_silver.parquet"
-      }
+        "fileName": "profile_metrics_silver.csv"
+      },
+      "columnDelimiter": ",",
+      "firstRowAsHeader": true
     }
   }
 }
