@@ -158,7 +158,7 @@
 			},
 			"root_folder": {
 				"type": "String",
-				"defaultValue": "semrush"
+				"defaultValue": "bronze"
 			},
 			"dbschema": {
 				"type": "String",
