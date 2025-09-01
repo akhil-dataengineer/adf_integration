@@ -7,4 +7,4 @@
     },
     "connectVia": {
       "referenceName": "AutoResolveIntegrationRuntime",
-      "type":
+      "type": "IntegrationRuntimeReference"
