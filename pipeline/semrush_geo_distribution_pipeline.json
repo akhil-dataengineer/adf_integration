@@ -39,7 +39,7 @@
 				"typeProperties": {
 					"variableName": "path_postfix",
 					"value": {
-						"value": "@concat(pipeline().parameters.root_folder, '/bronze/geo_distribution/', variables('report_month_date'))",
+						"value": "@concat(pipeline().parameters.root_folder, '/geo_distribution/', variables('report_month_date'))",
 						"type": "Expression"
 					}
 				}
