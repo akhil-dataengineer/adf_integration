@@ -1,0 +1,10 @@
+{
+  "name": "semrush_adls_linked_service",
+  "properties": {
+    "type": "AzureBlobFS",
+    "typeProperties": {
+      "url": "https://aienablementstorage1.dfs.core.windows.net/",
+      "authentication": "MSI"
+    }
+  }
+}

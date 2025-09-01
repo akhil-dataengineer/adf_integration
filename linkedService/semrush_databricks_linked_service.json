@@ -1,0 +1,11 @@
+{
+  "name": "semrush_databricks_ls",
+  "properties": {
+    "type": "AzureDatabricks",
+    "typeProperties": {
+      "domain": "https://adb-3858013253534654.14.azuredatabricks.net",
+      "authentication": "MSI",
+      "existingClusterId": "0826-180150-a3kduvi8o"
+    }
+  }
+}
