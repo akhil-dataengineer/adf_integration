@@ -1,0 +1,14 @@
+{
+    "name": "semrush_databricks_linked_service",
+    "type": "Microsoft.DataFactory/factories/linkedservices",
+    "properties": {
+        "type": "AzureDatabricks",
+        "typeProperties": {
+            "domain": "https://adb-3858013253534654.14.azuredatabricks.net",
+            "authentication": "MSI",
+            "workspaceResourceId": "/subscriptions/6d19cfcd-179a-4035-9078-34e6dfa53708/resourceGroups/adf-copilot-rg/providers/Microsoft.Databricks/workspaces/my-databricks-ws",
+            "existingClusterId": "0826-180150-a3kduvi8"
+        },
+        "annotations": []
+    }
+}
