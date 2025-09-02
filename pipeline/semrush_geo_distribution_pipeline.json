@@ -127,7 +127,8 @@
 				],
 				"userProperties": [],
 				"typeProperties": {
-					"message": "Failure notification email webhook failed for RunDatabricksNotebook."
+					"message": "Failure notification email webhook failed for RunDatabricksNotebook.",
+					"errorCode": "500"
 				}
 			},
 			{
@@ -233,7 +234,8 @@
 				],
 				"userProperties": [],
 				"typeProperties": {
-					"message": "Failure notification email webhook failed for CopyParquetToSQL."
+					"message": "Failure notification email webhook failed for CopyParquetToSQL.",
+					"errorCode": "500"
 				}
 			}
 		],
