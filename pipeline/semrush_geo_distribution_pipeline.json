@@ -121,13 +121,13 @@
 					{
 						"activity": "semrush_notify_failure_email_notebook",
 						"dependencyConditions": [
-							"Failed"
+							"Succeeded"
 						]
 					}
 				],
 				"userProperties": [],
 				"typeProperties": {
-					"message": "Failure notification email webhook failed for RunDatabricksNotebook.",
+					"message": "Failure notification email webhook sent for RunDatabricksNotebook.",
 					"errorCode": "500"
 				}
 			},
@@ -228,13 +228,13 @@
 					{
 						"activity": "semrush_notify_failure_email_copy",
 						"dependencyConditions": [
-							"Failed"
+							"Succeeded"
 						]
 					}
 				],
 				"userProperties": [],
 				"typeProperties": {
-					"message": "Failure notification email webhook failed for CopyParquetToSQL.",
+					"message": "Failure notification email webhook sent for CopyParquetToSQL.",
 					"errorCode": "500"
 				}
 			}
