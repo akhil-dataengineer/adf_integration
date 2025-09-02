@@ -88,6 +88,49 @@
 				}
 			},
 			{
+				"name": "semrush_notify_failure_email_notebook",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "RunDatabricksNotebook",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"method": "POST",
+					"headers": {
+						"Content-Type": "application/json"
+					},
+					"url": "https://prod-26.eastus.logic.azure.com:443/workflows/4063201f3aec4f30a314ce2b026aaca1/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=R3wbH22ihZ8DKvs90k-waRLDoEcxzoCotCendmgC7n8",
+					"body": "{ \"receivers\": \"@pipeline().parameters.receiver_emails\", \"activity\": \"RunDatabricksNotebook\", \"status\": \"Failed\" }"
+				}
+			},
+			{
+				"name": "semrush_fail_after_email_notebook",
+				"type": "Fail",
+				"dependsOn": [
+					{
+						"activity": "semrush_notify_failure_email_notebook",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"message": "Failure notification email webhook failed for RunDatabricksNotebook."
+				}
+			},
+			{
 				"name": "CopyParquetToSQL",
 				"type": "Copy",
 				"dependsOn": [
@@ -149,6 +192,49 @@
 						}
 					}
 				]
+			},
+			{
+				"name": "semrush_notify_failure_email_copy",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "CopyParquetToSQL",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"method": "POST",
+					"headers": {
+						"Content-Type": "application/json"
+					},
+					"url": "https://prod-26.eastus.logic.azure.com:443/workflows/4063201f3aec4f30a314ce2b026aaca1/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=R3wbH22ihZ8DKvs90k-waRLDoEcxzoCotCendmgC7n8",
+					"body": "{ \"receivers\": \"@pipeline().parameters.receiver_emails\", \"activity\": \"CopyParquetToSQL\", \"status\": \"Failed\" }"
+				}
+			},
+			{
+				"name": "semrush_fail_after_email_copy",
+				"type": "Fail",
+				"dependsOn": [
+					{
+						"activity": "semrush_notify_failure_email_copy",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"message": "Failure notification email webhook failed for CopyParquetToSQL."
+				}
 			}
 		],
 		"parameters": {
