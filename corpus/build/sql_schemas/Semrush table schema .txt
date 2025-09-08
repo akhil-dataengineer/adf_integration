@@ -1,0 +1,20 @@
+CREATE TABLE dev.semrush_geo_distribution (
+    target_name        NVARCHAR(256),
+    display_date       DATE,
+    device_type        NVARCHAR(32),
+    geo                NVARCHAR(8),
+    traffic            BIGINT,
+    global_traffic     BIGINT,
+    traffic_share      FLOAT,
+    users              BIGINT,
+    avg_visit_duration FLOAT,
+    bounce_rate        FLOAT,
+    pages_per_visit    FLOAT,
+    desktop_share      FLOAT,
+    mobile_share       FLOAT,
+    load_timestamp     DATETIME2
+)
+WITH
+(
+    DISTRIBUTION = ROUND_ROBIN
+);

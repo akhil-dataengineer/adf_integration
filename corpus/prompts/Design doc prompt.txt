@@ -1,0 +1,13 @@
+Prompt 1: "Use the requirements specifications document attached, review and analyze it thoroughly. Then, generate a professional, impressive design document for our 
+		   data engg. project."
+
+Prompt 2: "The goal is to complete this fully in the next 8 days or so. 
+		   Also, not always do we have raw data stored in the broze layer. In some cases in the USAGM project, we have raw data being pulled from the API 
+		   (in a Databricks env) followed by processing, transforming and storing the resulting data in a Bronze/Silver layer in ADLS. This data is then 
+		   exported to Azure Synapse by the use of pipelines in Azure Data Factory.
+		   So, considering the above points, generate a better, even more impressive professional design document."
+
+
+Prompt 3: "Consider the following feedback and re-generate a refined, more prefessional and impressive design doc: 
+		   1. We do need the use of a Dynamic Storage Router. 
+		   2. No code in the doc."

@@ -1,0 +1,47 @@
+i have a list of target domains stored in azure sql database, and i need a python script for complete semrush geo distribution data pipeline in databricks
+key vault details:
+
+key vault name: kv-ai-enablement
+databricks scope name: kv-ai-enablement (confirmed working scope)
+
+adf parameter integration:
+
+add databricks widgets to accept parameters from azure data factory pipeline
+widget parameters: report_month (default: "2025-08-01"), root_folder (default: "bronze"), dbschema (default: "dev"), global_targets_view (default: "vw_semrush_global_targets")
+use report_month as display_date in the pipeline
+use dbschema and global_targets_view to build dynamic target_query
+
+database details:
+server: get from key vault, secret name: sql-server
+database: get from key vault, secret name: sql-database
+username: get from key vault, secret name: sql-username
+password: get from key vault, secret name: sql-password
+target_query: SELECT top 10 clean_url FROM {dbschema}.{global_targets_view} (use widget parameters)
+use this connection template for reading from sql database:
+spark.conf.set("fs.azure.account.key.aienablementstorage1.dfs.core.windows.net", <adls_key_here>)
+spark.conf.set("spark.sql.execution.arrow.enabled", "true")
+target_df = spark.read 
+.format("com.databricks.spark.sqldw") 
+.option("url", f"jdbc:sqlserver://<synapse_server_here>:1433;database=<synapse_database_here>;user={username}@sql-opr-adap-dev-eus;password={password};encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;") 
+.option("forwardSparkAzureStorageCredentials", "true") 
+.option("query", target_query) 
+.load()
+since semrush api is having issues, generate realistic mock geo distribution data instead. use countries like: US, GB, DE, FR, CA, AU, IN, BR, JP, ES, IT, NL, SE, NO, DK, PE, PY, GH, HU, UA, PA, BI, IL, KR, PT, EC
+adls storage details:
+storage account: aienablementstorage1
+container: semrush
+storage key: get from key vault, secret name: adls-key
+the script should do the following:
+
+setup databricks widgets for adf parameters and display parameter values received
+use kv-ai-enablement as the key vault scope name
+use the exact connection template above to connect to sql database and get list of target domains
+extract domain list as: target_domains = [row['clean_url'].rstrip('/') for row in target_df.select("clean_url").collect()]
+for each domain, generate mock geo distribution data and combine all domains into one unified dataset
+create proper spark dataframe with schema (target_name, display_date, device_type, geo, traffic, global_traffic, traffic_share, users, avg_visit_duration, bounce_rate, pages_per_visit, desktop_share, mobile_share)
+clean and transform the data with proper data types
+add load timestamp
+save final data as parquet files to adls path: abfss://semrush@aienablementstorage1.dfs.core.windows.net/{root_folder}/geo_distribution/{display_date} (use widget parameters)
+show data sample and summary at the end
+
+make it a production-ready databricks notebook with logging and data quality checks

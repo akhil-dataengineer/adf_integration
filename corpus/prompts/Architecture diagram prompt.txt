@@ -1,0 +1,55 @@
+Prompt 1: 
+
+"Create a professional cloud architecture diagram with the following structure:
+--Three main sections laid out left to right:
+----Available Data Sources (Left)
+------Box labeled “Available Data Sources”
+------Containing items: Emplifi, Voltron, Pangea, Bluesky, Blubrry, Threads, Adobe
+
+----AI-Powered Azure Platform (Center)
+------Title: “AI-Powered Azure Platform”
+------Four stacked service boxes inside:
+--------Azure Data Factory
+----------Note: AI-generated pipelines
+--------Data Lake Gen2 + GitHub Copilot
+----------Notes: Bronze/Silver/Gold layers, AI-optimized partitioning
+--------Databricks + GitHub Copilot
+----------Notes: AI-assisted PySpark code, Schema handling, Error recovery
+--------Synapse + AI Copilots
+----------Notes: AI-generated DDL scripts, Optimized queries
+
+----Intelligent Consumption (Right)
+------Box labeled “Power BI + MS Copilot”
+------Notes: AI-generated DAX formulas, Natural language to visuals, Auto insights
+
+----Arrows / Flow:
+------Data flows from Data Sources → Azure Data Factory → Data Lake → Databricks → Synapse → Power BI.
+------Use clean directional arrows to show the flow.
+
+----Style:
+------Mix of Azure corporate style (clean rectangles, Azure blue palette) and modern infographic style (colorful highlights, light gradients).
+------Each service box should have a bold title, small descriptive bullets, and icons if available (Azure Data Factory, ADLS, Databricks, Synapse, Power BI).
+------Background should be light and professional, suitable for presentation slides."
+
+Prompt 2: 
+
+"Quick improvements to make it more professional and executive-ready:
+--Section Headers
+----Put a light background band behind each section (Data Sources | AI-Powered Azure Platform | Intelligent Consumption) so it’s visually grouped.
+
+--Service Highlights
+----Add 2–3 bullets under each service icon (like you had earlier: e.g., ADF → AI-generated pipelines).
+----Keeps the detail but still neat.
+
+--Consistency of Icons
+----Replace the SQL icon at the end with the official Power BI icon (yellow bar chart) since that’s more recognizable than generic SQL.
+
+--Flow Arrows
+----Use thicker arrows with labels (e.g., Pipelines, Clean Data, Optimized Queries) instead of plain connectors.
+
+--Color Balance
+----Right now icons are mixed (blue, red, etc.). Apply a consistent Azure palette (mostly blues + Power BI yellow as a pop).
+
+--Title & Subtitle
+----Add a clear title on top: USAGM AI-Powered Azure Data Platform
+------Subtitle: End-to-End AI-Enhanced Development Lifecycle."

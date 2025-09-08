@@ -1,0 +1,26 @@
+-- Below Prompt was used in Microsoft copilot
+
+please use the attached test case template 'Test_Case_Template' as an reference and use the below information and create a good test cases document with proper details and presentable information test case document based on the below 2 scenarios
+secanario 1
+1. Emplifi profile dataset having 2000 rows loaded in to databricks DBFS file system.
+2. Vs code with github copilot reads the dataset from dbfs 
+3. With proper prompt githubcopilot starts creating the python code and the python code is synced with databricks
+4. ADLS is mounted with databricks
+5. github produces code to create medalion arcitecture to create gold, silver and bronze folder in ADLS
+6. Bronze will have straight copy of Emplifi data as parquet file
+7. Silver will have non null columns and it will be parquet file
+8. Synapase will be mounted to ADLS and it can read data from silver, bronze layer
+9. Create external table in synapse based on parquet file and store in a database with schema .
+10. Use power Bi desktop to create a dashboard based on the table using microsoft copilot
+11. And publish the app in synapse 
+
+scenario 2
+1. 'Semrush' data is pulled through API using Githubcopilot in VS code
+2. Template is created for ADF piplines using githubcopilot
+3.With proper prompt githubcopilot starts creating the python code and the python code is synced with databricks
+3. githubcopilot also creates a json file for ADF
+4. ADF piplines are created with promting using a JSON 
+5. ADLS is mounted with databricks
+6. ADF pipline cretes a folder inside ADLS container and creats parquet file
+7. ADF pipline also creates tables in microsoft sqlserver 
+8. Most of the steps were done through prompting in vs code using githubcopliot.

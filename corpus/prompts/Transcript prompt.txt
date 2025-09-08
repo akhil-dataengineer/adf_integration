@@ -1,0 +1,8 @@
+Generate a transcript (refer to the attached files as templates) such that: 
+	imagine my company, Icube Consultancy Services Inc. (team could be data engineers or leads etc.) is at the client location right now to learn from the cleint about the 
+	requirements of the project, ask questions/doubts to understand better, talk about the resources they have eg. the data engineers etc.
+	
+	Also, think about what more conversations would normally happen, what more questions might be asked, what gaps might be highlighted, what feasibility aspects will be discussed, 
+	what roles and responsibilities will be talked about and much more. 
+			
+	Based on this, generate a realistic transcript like how a real requirements gathering interaction with a client would happen.
