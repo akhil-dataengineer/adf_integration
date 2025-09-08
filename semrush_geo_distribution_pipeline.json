@@ -1,0 +1,274 @@
+{
+	"name": "semrush_geo_distribution_pipeline",
+	"properties": {
+		"description": "Monthly SEMrush geo distribution data pipeline",
+		"activities": [
+			{
+				"name": "SetReportMonth",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "report_month_date",
+					"value": {
+						"value": "@if(equals(pipeline().parameters.report_month, ''), formatDateTime(addMonths(utcnow(), -1), 'yyyy-MM'), pipeline().parameters.report_month)",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "SetPathPostfix",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "SetReportMonth",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "path_postfix",
+					"value": {
+						"value": "@concat(pipeline().parameters.root_folder, '/geo_distribution/', variables('report_month_date'))",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "RunDatabricksNotebook",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "SetPathPostfix",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "01:00:00",
+					"retry": 1,
+					"retryIntervalInSeconds": 60
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/ryarapatineni@intuceo.com/.bundle/databricks_test/dev/files/usagm_databricks_test/src/semrush_geo_distribution",
+					"baseParameters": {
+						"report_month": {
+							"value": "@variables('report_month_date')",
+							"type": "Expression"
+						},
+						"root_folder": {
+							"value": "@pipeline().parameters.root_folder",
+							"type": "Expression"
+						},
+						"dbschema": {
+							"value": "@pipeline().parameters.dbschema",
+							"type": "Expression"
+						},
+						"global_targets_view": {
+							"value": "@pipeline().parameters.global_targets_view",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "semrush_databricks_linked_service",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "semrush_notify_failure_email_notebook",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "RunDatabricksNotebook",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"method": "POST",
+					"headers": {
+						"Content-Type": "application/json"
+					},
+					"url": "https://prod-26.eastus.logic.azure.com:443/workflows/4063201f3aec4f30a314ce2b026aaca1/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=R3wbH22ihZ8DKvs90k-waRLDoEcxzoCotCendmgC7n8",
+					"body": "{ \"receivers\": \"@pipeline().parameters.receiver_emails\", \"activity\": \"RunDatabricksNotebook\", \"status\": \"Failed\" }"
+				}
+			},
+			{
+				"name": "semrush_fail_after_email_notebook",
+				"type": "Fail",
+				"dependsOn": [
+					{
+						"activity": "semrush_notify_failure_email_notebook",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"message": "Failure notification email webhook sent for RunDatabricksNotebook.",
+					"errorCode": "500"
+				}
+			},
+			{
+				"name": "CopyParquetToSQL",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "RunDatabricksNotebook",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "ParquetSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFileName": "*.parquet"
+						},
+						"formatSettings": {
+							"type": "ParquetReadSettings"
+						}
+					},
+					"sink": {
+						"type": "SqlSink",
+						"writeBatchSize": 10000,
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false,
+						"disableMetricsCollection": false
+					},
+					"enableStaging": true,
+					"stagingSettings": {
+						"linkedServiceName": {
+							"referenceName": "semrush_adls_linked_service",
+							"type": "LinkedServiceReference"
+						},
+						"path": "temp"
+					},
+					"enableAutoMapping": true
+				},
+				"inputs": [
+					{
+						"referenceName": "semrush_adls_parquet_dataset",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "semrush_sql_table_dataset",
+						"type": "DatasetReference",
+						"parameters": {
+							"schema_name": "dev"
+						}
+					}
+				]
+			},
+			{
+				"name": "semrush_notify_failure_email_copy",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "CopyParquetToSQL",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"method": "POST",
+					"headers": {
+						"Content-Type": "application/json"
+					},
+					"url": "https://prod-26.eastus.logic.azure.com:443/workflows/4063201f3aec4f30a314ce2b026aaca1/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=R3wbH22ihZ8DKvs90k-waRLDoEcxzoCotCendmgC7n8",
+					"body": "{ \"receivers\": \"@pipeline().parameters.receiver_emails\", \"activity\": \"CopyParquetToSQL\", \"status\": \"Failed\" }"
+				}
+			},
+			{
+				"name": "semrush_fail_after_email_copy",
+				"type": "Fail",
+				"dependsOn": [
+					{
+						"activity": "semrush_notify_failure_email_copy",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"message": "Failure notification email webhook sent for CopyParquetToSQL.",
+					"errorCode": "500"
+				}
+			}
+		],
+		"parameters": {
+			"report_month": {
+				"type": "String",
+				"defaultValue": "2025-08-01"
+			},
+			"root_folder": {
+				"type": "String",
+				"defaultValue": "bronze"
+			},
+			"dbschema": {
+				"type": "String",
+				"defaultValue": "dev"
+			},
+			"receiver_emails": {
+				"type": "String",
+				"defaultValue": "avenkataraju@intuco.com"
+			},
+			"global_targets_view": {
+				"type": "String",
+				"defaultValue": "vw_semrush_global_targets"
+			}
+		},
+		"variables": {
+			"report_month_date": {
+				"type": "String"
+			},
+			"path_postfix": {
+				"type": "String"
+			}
+		},
+		"annotations": []
+	}
+}

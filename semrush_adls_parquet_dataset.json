@@ -2,15 +2,15 @@
   "name": "semrush_adls_parquet_dataset",
   "type": "Microsoft.DataFactory/factories/datasets",
   "properties": {
-    "linkedServiceName": {
-      "referenceName": "semrush_adls_linked_service",
-      "type": "LinkedServiceReference"
+    "linkedServiceName": { 
+      "referenceName": "semrush_adls_linked_service", 
+      "type": "LinkedServiceReference" 
     },
     "type": "Parquet",
     "typeProperties": {
       "location": {
-        "type": "AzureBlobStorageLocation",
-        "container": "semrush",
+        "type": "AzureBlobFSLocation",
+        "fileSystem": "semrush",
         "folderPath": "@{variables('path_postfix')}"
       }
     }
