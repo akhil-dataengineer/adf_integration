@@ -1,0 +1,32 @@
+[LOG] Connected to ADLS.
+[LOG] Ensured folder: bronze
+[LOG] Ensured folder: silver
+[LOG] Ensured folder: gold
+[LOG] Downloaded Excel file from ADLS.
+[LOG] Found sheets: ['Impressionsbytopic', 'Impressions by number of posts', 'Impressions by traffic source. ']
+[LOG] Sheet 'Impressionsbytopic' columns: ['video_title', 'impressions']
+[LOG] Saved impressionsbytopic to bronze as Parquet.
+[LOG] Bronze: Impressionsbytopic shape (499, 2)
+[LOG] Sheet 'Impressions by number of posts' columns: ['date', 'videos_added', 'impressions']
+[LOG] Saved impressions_by_number_of_posts to bronze as Parquet.
+[LOG] Bronze: Impressions by number of posts shape (6, 3)
+[LOG] Sheet 'Impressions by traffic source. ' columns: ['traffic_source', 'impressions']
+[LOG] Saved impressions_by_traffic_source. to bronze as Parquet.
+[LOG] Bronze: Impressions by traffic source.  shape (6, 2)
+[LOG] Data Quality [impressionsbytopic]: OK
+[LOG] Saved impressionsbytopic to silver as Parquet.
+[LOG] Silver: impressionsbytopic shape (499, 4)
+[LOG] Data Quality [impressions_by_number_of_posts]: OK
+[LOG] Saved impressions_by_number_of_posts to silver as Parquet.
+[LOG] Silver: impressions_by_number_of_posts shape (6, 4)
+[LOG] Data Quality [impressions_by_traffic_source.]: OK
+[LOG] Saved impressions_by_traffic_source. to silver as Parquet.
+[LOG] Silver: impressions_by_traffic_source. shape (6, 3)
+[LOG] Gold: Top performers and viral content extracted from impressionsbytopic.
+[LOG] Saved top_performers to gold as Parquet.
+[LOG] Saved viral_content to gold as Parquet.
+[LOG] Executive Summary:
+  - Top 5 performing items: أول يمني برتبة كابتن في شرطة مدينة نيويورك, موكب زفاف متوقف داخل نفق يتسبب في حادث مروع بالأردن, أديان أم أساطير, لحظة وقوع انفجار على جسر القرم, قصة طفل سعودي تعرض للاغتصاب في المدرسة
+  - 166 items classified as viral (high tier).
+[LOG] Chart saved: top_performers.png
+[LOG] Pipeline complete.

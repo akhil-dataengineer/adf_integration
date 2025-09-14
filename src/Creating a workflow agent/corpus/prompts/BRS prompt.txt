@@ -1,0 +1,7 @@
+Read and understand the transcript attached, it comes from an interaction between the client and consultants as part of requirements gathering. 
+			     
+	Now, using a template attached (brs_templat(1)), build a professional, impressive requirements specification doc that includes all the important aspects 
+	in a requirements specifications doc pertaining to a Data Engg project. Pfa the following doc: transcript and the template for the requirements specification doc. 
+				 
+	Note: Should be able to fill in all the details mentioned in the template. The template I provided was for a full stack project, give me the 
+	requirements specification from a data engg. project perspective.

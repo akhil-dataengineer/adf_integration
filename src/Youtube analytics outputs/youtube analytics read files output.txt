@@ -1,0 +1,93 @@
+
+--- BRONZE LAYER ---
+Raw data extracted from Excel, columns normalized. This is the untouched source data for further processing.
+
+File: impressions_by_number_of_posts
+        date  videos_added  impressions
+0 2024-03-19            33       729327
+1 2024-03-20            42       712068
+2 2024-03-24            28       685816
+3 2024-03-22            35       637098
+4 2024-03-21            32       630451
+Shape: (6, 3)
+Columns: ['date', 'videos_added', 'impressions']
+
+File: impressions_by_traffic_source.
+     traffic_source  impressions
+0             Total      4004884
+1    YouTube search      1425538
+2   Browse features      1239701
+3  Suggested videos      1024238
+4     Channel pages       231068
+Shape: (6, 2)
+Columns: ['traffic_source', 'impressions']
+
+File: impressionsbytopic
+                                         video_title  impressions
+0         أول يمني برتبة كابتن في شرطة مدينة نيويورك       428206
+1  موكب زفاف متوقف داخل نفق يتسبب في حادث مروع با...       271819
+2                                    أديان أم أساطير        86021
+3                     لحظة وقوع انفجار على جسر القرم        77779
+4             قصة طفل سعودي تعرض للاغتصاب في المدرسة        73140
+Shape: (499, 2)
+Columns: ['video_title', 'impressions']
+
+--- SILVER LAYER ---
+Cleaned data with duplicates removed, missing values handled, performance tiers and language detected. Ready for analytics.
+
+File: impressions_by_number_of_posts
+        date  videos_added  impressions performance_tier
+0 2024-03-19            33       729327             high
+1 2024-03-20            42       712068             high
+2 2024-03-24            28       685816           medium
+3 2024-03-22            35       637098           medium
+4 2024-03-21            32       630451              low
+Shape: (6, 4)
+Columns: ['date', 'videos_added', 'impressions', 'performance_tier']
+
+File: impressions_by_traffic_source.
+     traffic_source  impressions performance_tier
+0             Total      4004884             high
+1    YouTube search      1425538             high
+2   Browse features      1239701           medium
+3  Suggested videos      1024238           medium
+4     Channel pages       231068              low
+Shape: (6, 3)
+Columns: ['traffic_source', 'impressions', 'performance_tier']
+
+File: impressionsbytopic
+                                         video_title  ...  language
+0         أول يمني برتبة كابتن في شرطة مدينة نيويورك  ...    arabic
+1  موكب زفاف متوقف داخل نفق يتسبب في حادث مروع با...  ...    arabic
+2                                    أديان أم أساطير  ...    arabic
+3                     لحظة وقوع انفجار على جسر القرم  ...    arabic
+4             قصة طفل سعودي تعرض للاغتصاب في المدرسة  ...    arabic
+
+[5 rows x 4 columns]
+Shape: (499, 4)
+Columns: ['video_title', 'impressions', 'performance_tier', 'language']
+
+--- GOLD LAYER ---
+Business insights generated: top performers, viral content, traffic source breakdown. This is the data for decision-making.
+
+File: top_performers
+                                         video_title  ...  language
+0         أول يمني برتبة كابتن في شرطة مدينة نيويورك  ...    arabic
+1  موكب زفاف متوقف داخل نفق يتسبب في حادث مروع با...  ...    arabic
+2                                    أديان أم أساطير  ...    arabic
+3                     لحظة وقوع انفجار على جسر القرم  ...    arabic
+4             قصة طفل سعودي تعرض للاغتصاب في المدرسة  ...    arabic
+
+[5 rows x 4 columns]
+Shape: (5, 4)
+Columns: ['video_title', 'impressions', 'performance_tier', 'language']
+
+File: viral_content
+                                         video_title  impressions language
+0         أول يمني برتبة كابتن في شرطة مدينة نيويورك       428206   arabic
+1  موكب زفاف متوقف داخل نفق يتسبب في حادث مروع با...       271819   arabic
+2                                    أديان أم أساطير        86021   arabic
+3                     لحظة وقوع انفجار على جسر القرم        77779   arabic
+4             قصة طفل سعودي تعرض للاغتصاب في المدرسة        73140   arabic
+Shape: (166, 3)
+Columns: ['video_title', 'impressions', 'language']

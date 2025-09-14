@@ -1,0 +1,13 @@
+[LOG] Connected to ADLS.
+[LOG] Ensured folder: bronze
+[LOG] Ensured folder: silver
+[LOG] Ensured folder: gold
+[LOG] Ensured folder: logs
+[LOG] Downloaded CSV file from ADLS.
+[LOG] Bronze columns: ['profile_id', 'report_date', 'fans_lifetime', 'fans_change', 'insights_post_clicks', 'insights_reactions', 'insights_fan_adds', 'insights_fan_adds_unique', 'insights_fan_removes', 'insights_activity', 'insights_engaged_users', 'insights_fan_removes_unique', 'insights_positive_feedback', 'insights_negative_feedback', 'insights_fans_lifetime', 'insights_fans_online', 'insights_reach', 'insights_reach_7_days', 'insights_reach_28_days', 'insights_video_complete_views_30s_repeat_views', 'insights_impressions', 'insights_post_reach', 'insights_post_impressions', 'insights_video_complete_views_30s', 'insights_reach_engagement', 'insights_post_clicks_unique', 'insights_activity_unique', 'insights_video_repeat_views', 'insights_video_views_unique', 'insights_views', 'insights_video_complete_views_30s_unique', 'insights_video_views', 'engagement_rate', 'insights_engagements', 'insights_impressions_engagement_rate', 'insights_reach_per_content', 'interactions', 'interactions_per_1k_fans', 'likes', 'number_of_comments', 'page_posts', 'page_shares', 'sentiment_manual_auto', 'shares', 'user_posts', 'user_posts_average_response_time', 'user_posts_responded', 'user_posts_response_rate', 'user_questions', 'user_questions_average_response_time', 'user_questions_responded', 'user_questions_response_rate', 'date_from', 'date_to', 'profile_url', 'insights_enabled']
+[LOG] Saved profile_metrics_bronze to bronze as Parquet.
+[LOG] Data Quality [silver]: OK
+[LOG] Saved profile_metrics_silver to silver as Parquet.
+[LOG] Saved top_profiles to gold as Parquet.
+[LOG] Executive Summary:
+[LOG] Saved executive_summary to gold as text.

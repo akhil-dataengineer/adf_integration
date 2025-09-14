@@ -1,0 +1,39 @@
+i have a csv file with social media profile metrics stored on my databricks workspace.
+
+i need a python script for a complete medallion data pipeline and analysis.
+
+file path: /dbfs/FileStore/tables/emplifi_profile_metrics.csv
+
+adls details:
+- storage account: aienablementstorage1
+- container: social-media-analytics
+- storage key: get it using getpass or dbutils.secrets.get(), don’t hardcode
+
+the script should do the following:
+
+- read csv from the databricks workspace path
+- give a quick preview and summary of the data
+- create adls connection using secure method (no hardcoded keys)
+- create medallion structure with bronze, silver, and logs folders
+
+bronze layer:
+- normalize column names (lowercase, snake_case)
+- retain all columns, don’t drop even if null
+- add ingestion metadata (like timestamp)
+- save raw data as parquet to bronze
+
+silver layer:
+- keep schema same as bronze
+- fill missing values but don’t drop any column
+- remove duplicates, trim and clean fields
+- add a new column called engagement_score (sum of likes, comments, shares, reactions, etc)
+- add a performance_tier column based on quantiles of the engagement score
+- log all issues or findings as a text file in the logs folder
+- save silver output as parquet
+
+finally:
+- read back bronze and silver and show what each layer contains
+- give executive summary from silver (top performers, avg engagement score etc)
+- we’ll treat synapse as gold layer, no need to include that
+
+make sure the code is clean, safe, and enterprise-grade. don’t drop any columns

@@ -1,0 +1,3 @@
+thank you, now i have the final table structure in azure synapse (our gold layer) after pulling the file from silver layer.
+heres the schema of the data from the silver layr, provide sql queries to generate business insights like for eg. 
+profiles with most growth in fans, most active profiles (by page posts) etc. and more

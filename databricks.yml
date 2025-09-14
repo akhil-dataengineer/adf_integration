@@ -1,0 +1,35 @@
+# This is a Databricks asset bundle definition for usagm_databricks_test.
+# See https://docs.databricks.com/dev-tools/bundles/index.html for documentation.
+bundle:
+  name: usagm_databricks_test
+  uuid: e1d5a0f9-4f36-47ca-b2ce-99b3ae70db43
+
+artifacts:
+  python_artifact:
+    type: whl
+    build: uv build --wheel
+
+include:
+  - resources/*.yml
+  - resources/*/*.yml
+
+targets:
+  dev:
+    # The default target uses 'mode: development' to create a development copy.
+    # - Deployed resources get prefixed with '[dev my_user_name]'
+    # - Any job schedules and triggers are paused by default.
+    # See also https://docs.databricks.com/dev-tools/bundles/deployment-modes.html.
+    mode: development
+    default: true
+    workspace:
+      host: https://adb-3858013253534654.14.azuredatabricks.net
+
+  prod:
+    mode: production
+    workspace:
+      host: https://adb-3858013253534654.14.azuredatabricks.net
+      # We explicitly deploy to /Workspace/Users/ryarapatineni@intuceo.com to make sure we only have a single copy.
+      root_path: /Workspace/Users/ryarapatineni@intuceo.com/.bundle/${bundle.name}/${bundle.target}
+    permissions:
+      - user_name: ryarapatineni@intuceo.com
+        level: CAN_MANAGE

@@ -1,0 +1,3602 @@
+Intuceo Workshop 1 - Current state-20250709_130530-Meeting Recording
+July 9, 2025, 5:05PM
+2h 47m 50s
+
+Surya Jonnavithula started transcription
+
+Surya Jonnavithula   0:03
+Yeah, OK.
+OK.
+
+Sai Vootla   0:11
+A it.
+
+Surya Jonnavithula   0:18
+OK, let me start. First thing, Jerry, what we do is these sessions generally go like a topic by topic. We we ask a high level question, you go it, you can show a document that you may have or a screenshot or a system show us.
+
+Jerry D - D2I   0:19
+Yes.
+Yes.
+
+Surya Jonnavithula   0:37
+It's more of a questions from us and obviously the answers and clarification and discussion. That is how mostly we keep it interactive. So that is how it is, OK, just to set the expectation.
+
+Jerry D - D2I   0:40
+Mhm.
+Mhm.
+
+Surya Jonnavithula   0:55
+The first thing we start generally is we want to know business, right? So I know last time you gave it. Just to recap, how do we understand your business, D2I business? What is our clients expect from you? What is the value? If you can describe overall, we don't miss the high higher arching.
+Value aspect when we actually start thinking about the platform. So is that is that a good question from where you can give us some visibility understanding?
+
+Jerry D - D2I   1:19
+Mhm.
+Definitely, yeah. Basically the main, the main thing we do is represent physician groups. From that we feed a number of different. What's the best way? I call them clients just cause it keeps it simple. So we we basically engage with the physician.
+Group and we acquire data from the electronic health record. We also acquire data from their RCM vendor. We get it into, we pull that in usually in a daily setting where we'll we'll we'll work with the IT at the hospital system, we'll implement our code, we'll set up a.
+Automation that submits data to us on a daily basis that encapsulates all the EHR data. Depending on the implementation, it's everything, you know, everything that happened to the patient during the emergency room visit or during their inpatient, you know, hospitalized encounter. You know, we have a couple of different.
+A couple different workflows as far as extracting the data from the electronic health record. From there they deliver it securely to our AWS cloud. We're using SFTP right now. From there we have automated processes that pick the data up and ingest it into our data, basically our data warehouse. From there we feed a number of things. We have a business.
+Business objects environment where we're we're providing daily, weekly and monthly reports. So our the our clients can manage their business so that you know we we do a number of analytics in the business objects environment that basically say you know number of patients in how many left without being seen, you know stuff like that.
+Those reports are available for them to log in and look at or we have a model where we'll deliver that, you know, we'll deliver that to them directly. We also submit to ASEP for Cedar for MIPS. So part of the data acquisition, we get a lot of historical data related to the patient, all the data elements that are required so we can submit data ASEP. This is in support of them.
+Committing to Cedar also for some of their data research projects. So we have large sets of data that are going a couple different places. We also for some of our clients, we're actually just the data acquisition and we basically normalize their data, feed it to them so they can use it in their own infrastructures, so.
+Most of this, just about all of this is is done by a SFTP transfers as far as what the data you know our output for lack of a better word is sent you know to our clients either you know directly to ASAP so that ASAP can take it and ingest it directly to our clients so they can take it and ingest it into their architecture.
+For the most part, we keep all the data in a master data warehouse. You know, we go back 15, almost 20 years worth of data for some of our clients and you know we have a normalized data warehouse where we keep everything. Part of our challenge right now is you know some of the data is is depending on the workflow that we're using it.
+Don't load all the data. So for example, if they're not a MIPS client, you know, 2/3 of the data that we acquire doesn't get put into a normalized architecture just for various reasons. You know, we didn't have the resources. You know, we're looking at a data lake to solve that problem, a number of things. And the reason we engaged you is to, you know, better utilize the data that we have.
+Have a a more scalable architecture. So all this data comes in, it'll be put into an environment so we can readily get to it and transform it as needed. What am I missing, Greg? Anything. Research projects. We do research projects.
+
+Greg M.   4:46
+Yeah, well, I think, I think to boil it all down, we are data brokers, all right. We collect all kinds of data from hospital systems and then we move it on elsewhere. Our current model has been very bespoke.
+
+Jerry D - D2I   4:50
+Mhm.
+
+Greg M.   5:06
+So we will collect data from a client and then we have specific outputs that that client is is signed up for either to our business intelligence arm of the business or to the cedar output or to a research output you know we have.
+Very bespoke pathways. We're growing now to the point where we need to take all this data in and have it available for all the different output pathways. So it's it's data brokerage is our bread and butter. The analytics is just an arm that comes off of our brokerage, the the the MIPS submission.
+
+Surya Jonnavithula   5:28
+So.
+
+Greg M.   5:44
+Is another arm that comes off the brokerage. Research projects are another arm that comes off the brokerage. So that is the the best way I I would I would describe us as we're data brokers.
+
+Jerry D - D2I   5:55
+And we're we're looking to get all the data we have into a normalized format or for lack of a better term, so we can feed all these, you know, downstream systems, you know, yeah.
+
+Greg M.   6:03
+Correct. So we're not building things bespoke one at a time, 11 data flow at a time.
+
+Jerry D - D2I   6:06
+Yeah, we're and that's, you know, that's that's where our struggles for scalability like we can do things up to a point where it's the same, but there's always, you're always gonna have a left turn here or custom work here or whatever, you know. So, so we have the foundation to a point where it's as normalized as we can get it, but we also have to anticipate, you know, that custom information.
+
+Surya Jonnavithula   6:13
+Uh.
+
+Jerry D - D2I   6:26
+You know, there's there's certain workflows that we have to support, for example, where you know normally you would, you would store the data or process the data or deliver some kind of a metric in a certain way, but they want to be able to customize that based on what they're asking for. So we need the data in a normalized format. So you know right now the data gets processed and then we put it on a shelf. So if they ever have to come back and we have to.
+Change some.
+And it goes back two years. We have to go through an entire process where we pull it back off the shelf, reprocess it, make the ETL changes, you know, do a lot of gap run. It's very time consuming because the data isn't readily available and we really need to get away from that, put it on the shelf model and have it, you know, in a cloud with a metadata layer. You know, that'll also allow us to do a lot more with the research, you know.
+NLP coming down, you know, AI, there's a bunch of those buzzwords that, you know, if we had our data in a normalized model, you know, it would be a lot more valuable to our clients. It'd be a lot more, you know, a lot more valuable for us and we we'd be able to utilize it.
+
+Surya Jonnavithula   7:19
+Let's let's stop there and make sure that we understood. And Sai, first, why don't you go? I'm sure you have some questions, a lot of questions maybe to understand.
+
+Jerry D - D2I   7:23
+Mhm.
+
+Sai Vootla   7:34
+Yes, definitely. So from from what I understand right now, I guess.
+
+Greg M.   7:36
+So.
+
+Sai Vootla   7:41
+We have two types of one is definitely scalability that's to do with infrastructure system and how we build the pipelines. The other one is the data structure itself. So my question would be more like.
+From my understanding is we get data from these multiple different sources and we have pipelines for every client runs its own workflow and then we build reports out of the workflows help.
+Build a small data mark for that specific client. What we're trying to achieve here is to have one base data model that can serve most of the clients.
+Because the output reports are pretty much the same, but should also be able to build some ad hoc custom reports out of it. So it's like we want to categorize, have this set of canned reports or analysis so that.
+
+Jerry D - D2I   8:45
+Yeah, there there's definitely, there's definitely a canned report, but we do have some of that size. So it's not every single data set isn't treated as its own entity. We basically we we take all the raw disparately formatted, you know, we get flat files, we get CSVs, you name it. We normalize that and for into our data warehouse and then from there we're able to feed all of our other clients, but.
+
+Greg M.   8:47
+Yes.
+
+Jerry D - D2I   9:05
+We're only doing the normalization for a subset of the data for everybody. For certain clients we we process all the data and normalize it. For other clients it's only part because they weren't as Greg said they they're they're not a customer of MIPS. So we don't need to load their data. You know that was the decision that was made early just because you know we didn't have the resources at the time to to normalize and we're.
+
+Sai Vootla   9:21
+Oh.
+
+Jerry D - D2I   9:25
+To a point where everybody's done the same. You know the we can't control the data that we get in. We've tried over the years and it doesn't work. So you know it's just one of those things where any programmers go off on a go off on a tear and do whatever they want with our code and it it's easier for us to just take what we get and normalize it and then it flows down the line. We have that, we have that that normalization pipeline.
+
+Sai Vootla   9:30
+Right.
+
+Jerry D - D2I   9:45
+In place, we need to expand that to encompass all the data that we get.
+
+Sai Vootla   9:46
+OK.
+Gotcha. So, so we have like a a normalization pipeline that would get into a more generic data model. When I say generic, it's like one base data model that is evolving over time or is it like?
+Where the data can come from any source from any in any format, but we would transform the data to this specific model.
+
+Jerry D - D2I   10:18
+Correct. And and we we have a pretty mature process for that in place where you know we're we're we're not seeing a lot of variation on the data coming in. You know we've had some recent we we've had some recent you know modifications to our data set where we found that if we did if we added a couple data points that would improve our overall data and allow us to do better downstream reporting but for the most part it's it's.
+
+Sai Vootla   10:21
+OK.
+
+Greg M.   10:25
+Yes.
+
+Jerry D - D2I   10:38
+It's a mature environment. We get, you know, 95% of the time we have the same data set coming from everybody, depending on what electronic health record they are. But in recent times there has been some some change in the formatting, for lack of a better term.
+
+Greg M.   10:51
+Correct. The the data elements may be disparate and how we get them, but the data concepts, you know a blood pressure is a blood pressure is a blood pressure. So a lot of this will be trying to map out and and basically come up with our own.
+
+Sai Vootla   10:59
+Right.
+
+Greg M.   11:08
+Data definition for all these concepts and then as we take in new clients and or new data, it fits into each one of these data concepts.
+Buckets and gets normalized. That's kind of how I see it.
+
+Sai Vootla   11:20
+So.
+So, so for existing, when you onboard a new client, would you actually provide them with a format that you would expect the data to be?
+
+Greg M.   11:34
+We do.
+
+Jerry D - D2I   11:35
+We do.
+
+Greg M.   11:37
+But it's still up to the the the people at the hospital to implement it, and sometimes they'll change things. They may change header names, yeah.
+
+Jerry D - D2I   11:44
+Some programmers, yeah, some programmers are better than others. And I'm sure you've experienced that before. You know, we can give you, we we basically have an entire package with our code, you know, instructions, how to implement it. You know, it's standard across the board. But if we give it to one hospital, we'll get what we expect. We give it to another hospital, same exact scenario, we'll get some.
+
+Sai Vootla   11:44
+Right.
+Right.
+
+Jerry D - D2I   12:04
+Something entirely different. The contents will be the same, but all the column names will be different. You know what I mean? Like things things won't be in the same order we expect. You know, it's just one of those things where we have to do the best we can with the sources that we have.
+
+Sai Vootla   12:15
+Right so so pretty much every client we you we have like like a mapping layer that would map the source to the layer that you know whatever ingestion layer that you have.
+
+Jerry D - D2I   12:28
+Exactly.
+We do a lot of that work on the front end. So once we get the new data, we get a new data set, we do all of our mapping. So it goes to the normalized, you know, it goes into our standard data warehouse model. You know, we we tag it, we bag it, we identify it. We make sure we can join everything together for the various data sets that we have. You know, all that work is pretty much.
+
+Sai Vootla   12:34
+Gotcha.
+
+Jerry D - D2I   12:49
+Done. Like we have that data warehouse already. Um.
+
+Greg M.   12:51
+It's just we're we're running into the issues of it's now big data in a SQL environment and you.
+
+Sai Vootla   12:52
+OK.
+
+Jerry D - D2I   12:56
+Yeah, the problem is, yeah, exactly what Greg said. Yeah, we're SQL. Yeah, we have giant. We're starting to get giant data sets that SQL is really not designed to handle.
+
+Sai Vootla   12:58
+Right, right, right.
+
+Greg M.   13:00
+Bottlenecks and chokes within SQL.
+
+Sai Vootla   13:08
+Awesome. So in our case, so we are when it comes to data modeling and you know once we get the data data ingested after that the flow is pretty much defined and I know where the data is transformed and then reports everything are taken care of. So data.
+
+Greg M.   13:09
+And then.
+
+Sai Vootla   13:26
+Modeling wise, we are kind of, you know, have a a solid system in place.
+
+Jerry D - D2I   13:35
+I think that's fair, but like I said, we have the foundations as far as the the architecture is concerned. It's just that where it's living right now is is is somewhat limiting us.
+
+Greg M.   13:36
+Yeah, we have the foundations for that. Uh.
+We we'd like it to be more dynamic that we can do more with it in in this in the once you write it to the SQL table, it becomes pretty static and then updates and changes to that stuff become.
+
+Sai Vootla   13:45
+Gotcha. Gotcha.
+Yes.
+
+Surya Jonnavithula   13:58
+OK.
+
+Greg M.   14:01
+A lot more hairy. That's where Jerry was talking about something will change and then we have to gap load a whole bunch of stuff and we'll our our our data set was static because we wrote it to the SQL. It's no longer. So we want to find some.
+
+Surya Jonnavithula   14:04
+Yeah.
+
+Greg M.   14:17
+Some more dynamic.
+Making the data a little more dynamic so that it can cause it's it's healthcare data. We'll get the same set of data three days in a row and it will change some.
+Because you know this is a this is a living. What we're trying to track is a living document or is living data. You know this patients in the Uh things are changing and we're we're getting this data and it the the data can be changing and.
+
+Sai Vootla   14:33
+Right.
+
+Greg M.   14:48
+Keeping up with that is is difficult.
+
+Sai Vootla   14:54
+Thank you, Mike.
+And yeah, that's my those are my questions.
+
+Surya Jonnavithula   15:01
+OK. So let's a few questions from me. I think the last point we said I would like to little bit drill down Greg on that, but before that there are some terminology Jerry you are using like SIPS, MIPS, Cedar. Can you explain what they are?
+
+Sai Vootla   15:01
+So could we?
+
+Jerry D - D2I   15:18
+Mhm.
+Yeah, basically, Greg, you probably explained this better than I. It's it's a government registry that we submit data on behalf of our clients so they can basically get paid for for Medicaid. I know I'm super simplifying that, but Greg, is there a better, better way to explain that? Cause I'm I'm sure I didn't do it justice.
+
+Surya Jonnavithula   15:35
+Oh, OK.
+
+Greg M.   15:41
+Um, let me see if I can come up. I'm a visual person, so.
+
+Jerry D - D2I   15:45
+They're all different acronyms. You know, MIPS. MIPS is.
+
+Surya Jonnavithula   15:47
+Is that what you submit to CMC?
+
+Greg M.   15:51
+EMS Um.
+
+Surya Jonnavithula   15:51
+CMSCMS. Sorry, CMS, OK.
+
+Jerry D - D2I   15:52
+CMS Yeah, it's what we submit to CMS, yeah.
+
+Greg M.   15:53
+Yes, so.
+
+Surya Jonnavithula   15:55
+OK.
+
+Greg M.   15:55
+Correct. So, so CMS Medicare payments, they are changing their payment model from a fee for service which used to be you would submit a CPT code which says I did this and it's worth this amount of money and then the the doctor gets paid whatever that CPT.
+
+Is worth. They're slowly trying to change over to a a quality based payment model, which means.
+To get your maximum payment, you have to provide data that you are meeting quality standards. And in order to prove these quality standards, you have to show all of your data for for taking care of these patients, so.
+I don't know if I can there share from. Yeah, there it is share.
+So.
+Am I sharing now?
+
+Sai Vootla   16:55
+Yeah.
+
+Surya Jonnavithula   16:55
+Yeah, I can see.
+
+Greg M.   16:56
+OK, so.
+These old old measures, but it kind of shows you that. So what the the Uh physician group has to do to meet this ACEP 19 measure is show that they are.
+Not ordering head CTS for minor head injuries, right? It's a cost saving measure. You don't need to order so many CTS cause CTS are expensive. So in order to prove this, the ER doctors have to submit to CMS a count of all patients who are 18 years or.
+
+Surya Jonnavithula   17:22
+OK.
+OK.
+
+Greg M.   17:36
+They were presented with minor blunt head injury and had a CT ordered by the emergency care provider. Then you need to also provide a count for all those who had an indication for the head CT, IE the physician documented that I need a CT of the head for these specific reasons.
+All right. So we have to comb through all the data to pull out all of these little things and do the counts and then wrap it all up and we send it to ACEP. ACEP is the American College of Emergency Physicians. They're the ones who built these measures that are approved by.
+
+Surya Jonnavithula   17:55
+Oh, OK.
+
+Greg M.   18:14
+Miss to measure the the quality of care.
+
+Surya Jonnavithula   18:17
+OK.
+
+Greg M.   18:19
+They then there. So we send it to ASAP. ASAP's arm that does this stuff is called Cedar. The the Emergency Department register. The Certified Emergency Department registry is owned by ASAP. Cedar then submits all of these numbers to CMS.
+
+Surya Jonnavithula   18:32
+OK.
+
+Greg M.   18:37
+On behalf of the physicians and the physicians then get paid out accordingly.
+
+Surya Jonnavithula   18:43
+OK, got it.
+
+Jerry D - D2I   18:43
+But there, but there's also a dashboard element to this where you know ASAP provides a dashboard to their clients. We are also doing dashboarding in support of this. So having all these data elements tagged correctly allows us to generate reports similar to you know, so they can track how they're doing like if they have certain if they're identified five or six different measures that they want to track.
+We can then provide a report drilled all the way down to the provider. You know you're doing, you know you're doing poorly on ASEP measure 19 and these are these are the reasons why. So having all the having a metadata layer that that allows us to identify all this data, you know without having to transform it and put it into various flavors is important.
+
+Greg M.   19:11
+Correct.
+Eight years.
+
+Surya Jonnavithula   19:23
+Of course, of course, yeah. So so basically you are doing it all this work and submitting to ASAP. The Cedar division actually submits to the CMS and if there is some discrepancy, you provide your internal reports that you have will help drill down.
+
+Jerry D - D2I   19:31
+Yeah.
+
+Greg M.   19:35
+Correct.
+
+Surya Jonnavithula   19:43
+More details. So uh, that that's correct understanding, right?
+
+Jerry D - D2I   19:48
+I think so, yes.
+
+Greg M.   19:49
+Correct. Ultimately it's cedar to answer for what they submit, but they come back to us to say why is this that's the.
+
+Surya Jonnavithula   19:50
+Yeah, perfect.
+Hmm. Come back to you. Yeah, yeah.
+
+Jerry D - D2I   19:57
+Yeah, they'll come back and say, why are we missing this data element from the data you sent us? You know what I mean? There's definitely a give and take on that side.
+
+Greg M.   20:00
+If you want to get technical, CMS goes after the physician to say why did you submit this stuff? The physician goes to ASAP and say why did you submit this stuff? ASAP comes to us to say why did you submit this stuff?
+
+Surya Jonnavithula   20:13
+Oh, OK. OK. So once you get your data from your providers, I think you need to make sure that these things are done correctly, submit to the ASAP and I think, I think that's where the crux of. I think lot more value you guys are providing to the providers looks like. OK, got it.
+
+Greg M.   20:32
+Correct. Anytime we can, yeah, anytime we can codify data that comes in is is a huge win.
+
+Jerry D - D2I   20:33
+That's definitely the direction we're going in, yeah.
+
+Surya Jonnavithula   20:33
+That's not a not a value.
+Yeah, yeah.
+
+Greg M.   20:41
+Um.
+Because then this becomes only the drop of the iceberg. Because yes, CMS is looking at this, this, this head CT, but bigger than that some of these measures.
+
+Surya Jonnavithula   20:44
+Yeah.
+
+Greg M.   21:00
+Let me find here avoidance of opioid therapy for migraine low. That's not just it's not just Cedar and ACEP are interested in this. There are every clinician group, every hospitals looking at how they can you know the the the whole opioid.
+
+Surya Jonnavithula   21:18
+Yeah.
+
+Greg M.   21:18
+Research. So there are so many research studies. We have two research studies that we're working with Yale all about opioid usage, which are outside, you know, the specific things I need to look for for this measure. Well, they're looking for, they're doing all the research behind this.
+And so anything I can tag that's related to opioids is great because somebody's gonna ask for that down the road.
+
+Surya Jonnavithula   21:45
+Yeah, yeah, yeah, yes. But these are all the reports specific to provider, right? There is no aggregation across your providers you are doing in terms of your reports. In fact, even entire your pipeline, every stage is actually.
+What I call it as a it is, it is provider specific right? For example when you ingest data that is a provider specific data and then transformation and keep your goal layer, whatever you call it as that's a separate and then reports are separate the whole pipeline.
+
+Greg M.   22:08
+Correct.
+
+Surya Jonnavithula   22:19
+In terms of data is maintained, not clubbed together, right? Night joined across the clients. It's a separate tenant in a way.
+
+Jerry D - D2I   22:26
+We.
+
+Greg M.   22:28
+So that's benchmarking, which we don't currently do forwardly, but it would be a huge, huge.
+
+Jerry D - D2I   22:28
+We we.
+Yeah.
+
+Surya Jonnavithula   22:31
+Um.
+
+Jerry D - D2I   22:39
+But.
+To answer the question, we're storing data at the patient encounter level. We, you know we we have identifiers so we can identify what group or what hospital or what have you. But ultimately what what it drills down to is we are, you know we store everything at the individual encounter level. You know we we have the same patient come to the same hospital three times over the course of three months.
+
+Greg M.   22:40
+Asset.
+
+Surya Jonnavithula   22:55
+Hmm.
+
+Jerry D - D2I   22:59
+So we have all three of those encounters like we're we're interested at we identifying all this information at the individual encounter level.
+
+Surya Jonnavithula   23:08
+OK, so when you say encounter, it also includes the the provider ID.
+
+Jerry D - D2I   23:09
+Yeah. So that's that's really.
+Provider, yeah, basically we we go through the process of identifying who the, who the provider responsible for, you know, the visit, who entered what order, who entered what medication. Like we drill all the way down to the individual data element, but it's all identified at the encounter level.
+
+Surya Jonnavithula   23:31
+Perfect.
+
+Greg M.   23:31
+Yeah, it's all, it's all reported at the at the tin, the the tax identification number level. So that's our client. So you can see that these are the outputs to to Cedar. These are the physical output files that I put out. They are all grouped by the client ID.
+
+Surya Jonnavithula   23:50
+OK.
+
+Greg M.   23:51
+Good to your question.
+
+Jerry D - D2I   23:52
+And we may, we may end up with 23 different hospitals that belong to that client ID. But we we try to store the data at the encounter level. So we can drill all the way down to say, OK, this is the number of encounters you had in this ED at this day. You know that's just one element of our data warehouse.
+
+Surya Jonnavithula   23:57
+Mm.
+
+Greg M.   24:01
+Exactly.
+
+Surya Jonnavithula   24:02
+Yeah, yeah.
+Yeah.
+
+Greg M.   24:05
+Correct.
+
+Surya Jonnavithula   24:08
+So when, when, so if I get into the encounter data, right, Jerry and Greg, I will see all the patients of all the providers encounters, right. So it's not that they're maintained in a separate tables, OK.
+
+Greg M.   24:09
+Yeah.
+
+Jerry D - D2I   24:12
+Mhm.
+Yep, yes.
+No, we we we have we we bring, we bring it all together in the same grouping like that's our normalization layer. But every single hospital like if you look this, this is what demographics. Yeah. So in our yeah that we've ever gotten you know in the last I think this is 3 years worth of data he's representing right here.
+
+Surya Jonnavithula   24:23
+OK, got it.
+OK.
+
+Greg M.   24:32
+Yeah, so this is every single visit for every single client.
+
+Surya Jonnavithula   24:37
+Yeah, perfect.
+
+Greg M.   24:41
+It.
+
+Jerry D - D2I   24:42
+You know what I mean? So, you know, but we go back to 2010, you know what I mean? We have, we have data going back, you know, 15, sometimes 18 years and it's, you know, we have it in archive because you can't, you know, without having a seriously robust SQL environment, you can't really keep all that data online.
+
+Surya Jonnavithula   24:43
+Hmm.
+Mm.
+Mhm.
+Yeah, yeah, yeah.
+
+Jerry D - D2I   25:01
+You know what I mean? It just, it's just not cost effective. You know, if it's data we're not gonna look at, you know, if it's outside of a certain period of time, we just take it offline and we have it and we could pull it back if needs be. And we've just had a couple situations where we had to do a massive pullback from archive because we're doing research projects.
+
+Surya Jonnavithula   25:05
+Correct.
+
+Greg M.   25:17
+Correct. So we're sitting, we're currently sitting at 18,000,000 individual visits and that's the that is. So this would be our like our fact table. So it's one visit per row, but then when you look at our details table, you'll go into orders.
+
+Surya Jonnavithula   25:18
+Hmm.
+Mm.
+Mhm, Yep.
+
+Jerry D - D2I   25:30
+Well, it's actually.
+OK.
+
+Greg M.   25:34
+Now these orders are only for a select set of clients because not all clients do we need to do these orders for. But now this blows out. You know you'll have 100 orders per visit. So take that 18,000,000 and now.
+You know you're gonna go an order of magnitude higher in row count, and that's where we start losing it.
+
+Sai Vootla   25:54
+Right.
+
+Surya Jonnavithula   25:57
+OK.
+
+Jerry D - D2I   25:57
+But we're but this is also not all of our clients cause that this is not representative of of EMP Greg, you know what I mean? If we went to ED OPS where we collect everything our our visit count would would skyrocket by another you know a couple million, yeah.
+
+Greg M.   26:03
+Oh, yes, so this is.
+Yeah, we have a whole other data set, a whole other data client in.
+
+Jerry D - D2I   26:13
+This EMP, it's our, it's one of our data warehouse clients where we store all their data and keep it available for them. We submit it in text format, but we also have it online in case they request it. Part of our contract is to keep it online and available for them.
+
+Surya Jonnavithula   26:26
+Perfect. OK. So so when you say just again make sure that I we are on the same page. When you say client, it is the patient or the provider provider group, right? OK.
+
+Jerry D - D2I   26:27
+Yeah.
+
+Sai Vootla   26:28
+Oh, wow.
+
+Greg M.   26:28
+But.
+
+Jerry D - D2I   26:41
+It's the provider group. So it it, yeah, it.
+
+Greg M.   26:42
+You're a physician group.
+
+Surya Jonnavithula   26:44
+Yeah, physician group. Yeah, perfect. Yeah, that's what I thought. I just wanted to make sure, yeah.
+
+Jerry D - D2I   26:47
+Yes, the physician group is, yeah. And then whatever hospitals they want us to pull data from, they identify and then we work with the individual systems they belong to to get the data out. So we have situations where you know we'll have an Epic, a Cerner, a Meditech, a Med host.
+
+Surya Jonnavithula   26:56
+Hmm, OK.
+
+Jerry D - D2I   27:02
+You know all the various EH electronic health records that are popular out there and they'll they'll all be under the same group because we we're pulling data from multiple hospitals that have multiple electronic health records. It's it's funny trying to explain this cause you don't realize how complex it is cause we do it every day but just trying to summarize so somebody who's brand new to it you know it's it's it's it's.
+
+Surya Jonnavithula   27:13
+Mm-hmm. Yeah.
+
+Greg M.   27:15
+Yes, I I I.
+
+Jerry D - D2I   27:22
+A lot more complex than you realize until you try to explain it.
+
+Greg M.   27:24
+Well, I the the things that need to be understood to begin with is that the doctors in an Uh are not employees of the hospital or the hospital group that that Uh is. So my local hospital, Hunter and Medical Center.
+
+Surya Jonnavithula   27:24
+Yeah, yeah.
+
+Greg M.   27:41
+All right. 100 Medical Center, 100 in healthcare organization as a hospital. The Uh is run by Pegasus Emergency Physician Group, a completely separate contracted Uh physician group. OK, those are the people that we represent. So Alteon is a physician group.
+Now Alteon is contracted by all of these hospitals.
+Now, some of these hospitals may be in the same healthcare system. They may be different hospital systems. You can see Blue Water. Blue Water is an emergency physician group, however, they.
+
+Surya Jonnavithula   28:06
+OK.
+
+Greg M.   28:21
+Function in Central Maine's Central Maine health hospital systems. They also are in Maine Midcoast hospital systems. So it's it's how we breakdown.
+
+Surya Jonnavithula   28:37
+No, OK.
+
+Greg M.   28:38
+Our clients, quote UN quote, we work for the physician group. We then go to all the different hospital systems that they function in and we ask them for extracts. Sometimes the extracts are in the same EMR system, sometimes they're indifferent.
+
+Surya Jonnavithula   28:50
+Mm.
+
+Greg M.   28:54
+So you can see Alteon, we get some in Epic, some in Cerner. So that's why I say we're data brokers. We work for Alteon and we broker all of the data that they enter in to all the EM Rs for all the different hospitals that they service.
+
+Surya Jonnavithula   29:11
+OK, now this is good. This is good. Good to understand. OK, so let's go to Sai. Did I interrupt you, Greg or?
+
+Greg M.   29:22
+Yeah, I think that's the best way trying to. It's very difficult to understand sometimes the the birds nest that that we go.
+
+Surya Jonnavithula   29:23
+Perfect. Yeah.
+Super.
+Yeah, yeah. Now I understand why you say physician group, not a hospital. Understand. OK, perfect.
+
+Greg M.   29:33
+Um.
+
+Sai Vootla   29:34
+Yeah.
+
+Greg M.   29:39
+Correct. But but that's that's the.
+That's the the the rule, not the law, because, you know, we also work for Robert Wood Johnson, which is a hospital system.
+
+Surya Jonnavithula   29:52
+Yeah, yeah, I got it. I got it. Yeah. Yeah. So how you. Yeah, yeah. Sometimes you have the hospital system, but you you actually at a physician level is your interest. So yeah, I got your in. Perfect.
+
+Jerry D - D2I   29:53
+Yeah, yeah. Okay.
+
+Greg M.   29:54
+And it runs backwards.
+
+Jerry D - D2I   30:04
+Yeah.
+Mhm.
+
+Surya Jonnavithula   30:10
+Yeah, yeah.
+Position.
+And.
+
+Greg M.   30:20
+Other.
+You know, for for contracted employees.
+
+Surya Jonnavithula   30:24
+Yeah, perfect.
+
+Greg M.   30:25
+It's Rockwood UEP is like that.
+
+Surya Jonnavithula   30:30
+Yeah. So, Sai, you have a question. You said you you raise your hand.
+
+Greg M.   30:30
+Intermountain.
+
+Sai Vootla   30:34
+Yes, for me it was like the data that I'm looking. Is it like the raw data?
+Are.
+
+Greg M.   30:43
+So when you're looking at something like demographics, this is what Jerry refers to as our normalized. So it's not raw. We have all, you know, you want the raw for the Alteon demographics. Well, that's this is the CSV.
+
+Sai Vootla   30:50
+Normalized, OK.
+
+Greg M.   31:02
+File that we got from this.
+Alteon Bayshore, this hospital here is the raw CSV in a table form.
+
+Sai Vootla   31:13
+Cool.
+
+Greg M.   31:13
+We then take and put this through an ETL to try and normalize it into.
+This where quote UN quote warehouse table wherever heck I would.
+Into this table.
+So currently everything is kind of stepped out in a very.
+Uh, stage or temp table.
+
+Sai Vootla   31:39
+Right, so.
+
+Greg M.   31:39
+Our ETL will pull in the CSV file. It will first take that CSV file and try and create a raw SQL table out of it. Then we'll have other ETLs that'll come in and read the raw CSV and then try and normalize it into the raw SQL table.
+Normalize it into um.
+
+Jerry D - D2I   32:00
+That ED demo stage right above Greg. You scrolled past it. Yep.
+
+Greg M.   32:01
+Each demo, yeah. So you know, we'll go from the raw to a stage to then trying to write it into our warehouse, quote UN quote warehouse table. And then we do that for all the different data elements, demographics, orders, medications, you can see.
+Raws here. Um.
+
+Sai Vootla   32:23
+And the data warehouse table has data for multiple clients.
+
+Jerry D - D2I   32:28
+Correct.
+
+Greg M.   32:30
+Sorry, I just.
+
+Sai Vootla   32:31
+OK.
+
+Jerry D - D2I   32:31
+Yeah, our data warehouse table, the the, the post processor normalized tables as Greg referenced, that's everybody like we we don't segment that out. We we we use identifiers in in various identifiers. We can group it downstage. But just to keep things simple, we tried to cohort it or all into the same, you know, lack of cohorting rather.
+
+Sai Vootla   32:37
+Yeah, we would got you.
+
+Jerry D - D2I   32:51
+We collect it into all the same warehouse tables just because we want. That's where our normalization comes from.
+
+Sai Vootla   32:58
+Yeah, I mean, looking at this data size, you have a pretty big SQL Server running.
+
+Jerry D - D2I   33:02
+We do, but it and it's it's on the older side. So there's there's a lot of reason we're going down this path because I if if we continue to keep doing things we're doing, we're going to have to expand our sequel out pretty significantly. We're going to have to modernize because we're on a, you know, we're I think we're on 17 for this particular instance.
+
+Sai Vootla   33:14
+Right.
+
+Jerry D - D2I   33:19
+You know, we have some older servers that need to be replaced. So instead of recreating the wheel, I'd rather double down on let's use modern. You know, this is the way we got to go, you know, because this will also allow us to feed other client, other partners that we have. We have a number of partners that we feed data to and right now it's very archaic. I'd rather be able to.
+
+Sai Vootla   33:24
+Right.
+
+Jerry D - D2I   33:38
+Throw that, throw up an environment that we can share more readily.
+
+Sai Vootla   33:43
+Right, so right now the way I see it is we're using SQL Server as our storage and processing, while we could separate storage and only use the processing when needed to process the data to either move or research or whatever and not not pay for.
+
+Jerry D - D2I   33:48
+Yep.
+
+Greg M.   33:49
+Correct.
+
+Jerry D - D2I   33:58
+Exactly.
+
+Sai Vootla   34:01
+This live data all the time.
+
+Jerry D - D2I   34:02
+Yeah, we're talking about terabytes worth of of databases that we're keeping online right now and we don't, we don't have to touch, you know, we we're not touching like once we touch it the first time, usually we don't have to touch it again until until it's needed. So you know I was also looking at you know once we've once we've gotten past a certain time frame taking this offline and putting it into a format.
+
+Sai Vootla   34:08
+Right.
+Absolutely.
+
+Jerry D - D2I   34:23
+Where we could retrieve it, you know, kind of like a data lake. But I think we, you know, I think there's a better way of doing that. You know, do we keep post process data like we want. I'd rather use SQL as my workhorse for like readily needed and then have a better storage capacity after it's been processed, after it's been normalized or what have you, you know, or we don't do that at all like I'm not tied.
+
+Sai Vootla   34:28
+Web search.
+
+Jerry D - D2I   34:42
+I'm not necessarily tied to the exact way we're doing things. Like I'm not looking to recreate the wheel. I'm trying to we're we're looking for expertise on what is a better way of handling this, this ginormous data set that we have. So it's, you know, using modern tools and you know, we're we're performing best practices.
+I don't think SQL is it.
+
+Sai Vootla   35:00
+Yeah, the way I see it is the main key, a main issue, not issue, but then.
+The problem is handling large datasets and there's no need to have these datasets lively available all the time.
+
+Jerry D - D2I   35:15
+Mm-hmm.
+Exactly. You know that that's one of the challenges we're having right now is like we we didn't need, you know, for one of the research projects, I'll just call it MCES. We haven't needed the data from 2000 and whatever we 10 or whatever it was. We went back pretty far. We haven't even looked at that data in years until now. It's a research project. So it turned into a multi-week.
+Process of, you know, a couple days to get the data into a format we could use to pull it back because we didn't store it. You know, we went from basically a flat file state and had to bring it back into a SQL architecture so we could then build a process to, you know, feed this research project and just to make things more complicated the.
+
+Sai Vootla   35:57
+Right.
+
+Jerry D - D2I   36:04
+Our boss made the output very complicated because we're doing, you know, calculations and metrics and you know, it just turned into a very complex project that took a lot longer than I would have liked.
+
+Greg M.   36:18
+Yeah, and not to mention that over the the five years there have been schema changes.
+
+Jerry D - D2I   36:26
+Yeah, that's the other thing.
+
+Greg M.   36:27
+So the flat file we pull in doesn't even match what we. So now we're again, the data is no longer dynamic. We have static stacks of data and now to try and compile it all you have to rebuild all these connector, you know this normalization.
+
+Shashank Saran   36:27
+Yeah.
+
+Greg M.   36:43
+Yeah. So it it's we were a small company that has been growing and growing and growing and we've been just as we find a new challenge, we come up with a solution for that challenge and that you know didn't necessarily always encompass or look at the entire picture when it was.
+Solving its problem. And so you've got a lot of disparate solutions. They're all solutions. Everything works, but.
+
+Sai Vootla   37:05
+Right.
+
+Greg M.   37:12
+Now, as we grow bigger and we're being asked for more, those disparate solutions don't work with each other.
+
+Sai Vootla   37:19
+Right. So from I was just going through your website and it says you know what we would you adopted is like a balanced scorecard model.
+Right, So what we're trying to?
+
+Greg M.   37:30
+That's the analytic side, so that that.
+That to to Jerry and I, we consider that stuff and the the what the the guys are selling as our analytics as being one of our customers. So there's a whole other server here that is all of that analytics that what Jerry and I do on this data server is we feed.
+All of these tables here so that they they become like one of our clients, one of our data outputs to then take all the demographics that we have and and our sales guys have very specific requirements for the data that they want on the analytic side.
+
+Sai Vootla   37:57
+Absolutely.
+
+Surya Jonnavithula   38:01
+Oh.
+
+Greg M.   38:12
+And so we'll take that demographics table and then we rewrite a whole new curated visit level table for them.
+
+Sai Vootla   38:21
+This is post transformation.
+
+Greg M.   38:23
+Correct. So this would be a gold layer or a data pond.
+
+Sai Vootla   38:26
+This is a goal, yes, yeah.
+
+Greg M.   38:29
+You know this I I consider data pond to our data lake. So this is curated visit level data while this is our warehouse.
+This one is our warehouse non curated. This is as you know as pure as it came to us level.
+
+Sai Vootla   38:47
+It is more like bronze and silver. If we take the metal architecture, it's a bronze and silver and then we have the gold as a separate database.
+
+Greg M.   38:53
+Correct. If if I were trying to fit that into a model, I would say here's your bronze layer.
+
+Sai Vootla   38:56
+Oh.
+Yeah.
+
+Greg M.   39:00
+Here's your silver layer.
+
+Sai Vootla   39:02
+Yes.
+
+Greg M.   39:05
+Here's our gold layer, and then here's the pond that can come out of the gold layer.
+
+Surya Jonnavithula   39:14
+Yeah.
+
+Greg M.   39:15
+We output from the gold layer a curated set of data.
+I see.
+
+Jerry D - D2I   39:21
+And that's in service of our business objects environment. For that example, Greg, the operations, you know we we we built specifically that pond, you know as Greg references it because there are specific needs for business objects and that's why we're using the format that we have.
+
+Greg M.   39:23
+Yeah, that's just for the. Yeah, exactly.
+
+Sai Vootla   39:35
+Right, right, right.
+
+Jerry D - D2I   39:36
+You know, and it's very curated, it's very messed with, it's not clean data, it's very post processed for a specific target.
+
+Greg M.   39:37
+Sure.
+There is. Well, to put it into perspective, there is no data normalization anywhere in this, in this, you know, forget Boyd Coddington or anything like that. Every single, every single table has the same sets of these these five columns.
+
+Sai Vootla   39:44
+Target.
+
+Greg M.   40:00
+Because they don't want to have to join this table to everything, they want to be able to just go straight into one of these tables and and be able to start querying it so.
+
+Sai Vootla   40:01
+Thank you.
+It's more like pre aggregated everything like MO app or roll app to just to have data served faster.
+
+Greg M.   40:11
+Yeah.
+Yeah, exactly.
+Act.
+
+Jerry D - D2I   40:21
+Yeah, they want to be able to click a report and it refreshes in two seconds. You know, they don't want to have to do back end. I don't know that we're using the Business Objects environment to the best of its ability, but this was the challenge we were given. So we're supporting it and this is how it all started. I consider this more of a legacy process, but it is a big arm of our business.
+
+Sai Vootla   40:26
+Right.
+
+Greg M.   40:32
+Yeah.
+
+Sai Vootla   40:36
+Yeah.
+
+Jerry D - D2I   40:40
+But I would not, you know, if we were challenged with I want to go back to get as clean, you know, clean data that did comprehensive clean data that hasn't been manipulated. I wouldn't come here because this is, you know, it's good data. It's just it's it's representative of a very specific target and you know that that's the manager.
+Management of our provider management of the Uh. So there's a lot of metrics, there's a lot of cleaning, there's a lot of normalization. There's overriding of data fields from multiple sources. You know, where the D2I is, you know, I'd rather keep everything, you know, that's true data warehouse.
+
+Sai Vootla   41:03
+Right.
+
+Greg M.   41:11
+Yeah, it so.
+Our legacy business, yeah, our legacy business model was in doing this data analytics and providing these dashboards. Our business future is in the data brokerage. It's in supplying data to research, supplying data to a SEP seeder, supplying data to other.
+Entities. Our value is in the in in the data that we have, not in how we've curated in the past.
+
+Surya Jonnavithula   41:36
+Oh.
+Got it. That's. Yeah, yeah, yeah. I think that makes sense. How your legacy is basically analytics. Now you're getting into brokerage, so you have a lot more stakeholders to sell the data, not only just the analytics internal consumption, I mean to the BO, OK.
+
+Greg M.   41:40
+That makes sense.
+
+Sai Vootla   41:44
+Yeah.
+
+Greg M.   41:54
+Exactly. We've we've got people on our sales force who who who know the Pharmaceutical industry and that is going to be you know a a a potential big big windfall for us cause pharmaceuticals will pay a lot of money for.
+
+Surya Jonnavithula   42:03
+Yes, yeah.
+Oh, yeah, that's huge. Yeah, that's huge. Yeah, yeah.
+
+Greg M.   42:10
+For patient data, well, that's where we need you. We need to get this. We need to get our data squared away so that we're prepared for when they open those floodgates and say, hey, we've got, you know, billions of data elements and people start wanting to to basically purchase the data we need to be able to.
+
+Surya Jonnavithula   42:28
+Yeah, yeah.
+
+Greg M.   42:30
+To broker it faster, more dynamic, that's that's where I'm going.
+
+Sai Vootla   42:32
+Yeah, because from what I said, this is the last layer. This this might not even exist tomorrow. It might completely be replaced. We should not be a problem, but we should be able to regenerate this at any given point.
+
+Surya Jonnavithula   42:33
+Perfect. Yeah, yeah.
+
+Sai Vootla   42:46
+Uh, this layer of data.
+
+Jerry D - D2I   42:48
+Yeah, that that.
+Yes, that would be the ultimate goal. Like we, you know, we're.
+
+Greg M.   42:52
+Correct.
+
+Surya Jonnavithula   42:52
+Oh my.
+
+Jerry D - D2I   42:57
+It's kind of the way we operate now, you know what I mean? Like we're we're transforming in this data, but the source of this table exists, you know, it currently exists in the SQL table because that's the best way we have. But we'd like, you know, there's got to be a better medium, better way of handling it.
+
+Sai Vootla   43:01
+Yeah.
+
+Greg M.   43:09
+If you go back in history, our data went straight from the raw to this table. We didn't have that that middle ground of where we were taking and just storing kind of the raw unadulterated data. We just started doing that over the past two years, realizing that we've got more requests.
+For this data than just this curated set that that the company started with was founded with. So that's where we started building this out and kind of understanding the need for this data lake architecture, but not having the.
+
+Surya Jonnavithula   43:38
+Mhm.
+
+Greg M.   43:47
+Technology or the the expertise or the technology or the need at the moment. All of a sudden over the past two years, that need has grown substantially and has found us where we are now saying, OK, we need to look at this like it's a true big data data lake architecture.
+Model and now we need to convert everything to it.
+
+Surya Jonnavithula   44:10
+OK, no, this this is good. So anything else, Sai?
+
+Jerry D - D2I   44:19
+And if we're over explaining, please let us know because Greg and I are very good at over explaining.
+
+Sai Vootla   44:20
+Definitely.
+
+Surya Jonnavithula   44:24
+No, this is good.
+
+Sai Vootla   44:25
+No, this is the more information the better.
+
+Jerry D - D2I   44:28
+OK, just making sure because we, Greg and I can go on for hours. If you keep poking us, we're just going to keep giving you more in-depth analysis kind of stuff. So stop us. We're Jerry and I are very intuitive folks. So everything that we've seen here is is my intuition is saying I need to go this way I I.
+
+Surya Jonnavithula   44:30
+Yeah, no. But uh, no, no, no, definitely, yeah.
+
+Greg M.   44:32
+Yeah.
+
+Sai Vootla   44:34
+Sir.
+Yeah, so it's like whatever we have.
+
+Surya Jonnavithula   44:38
+Yeah, so couple of things, uh, from mice.
+
+Greg M.   44:47
+I'm not the the.
+Technical expert. I'm not the, you know, I don't know the industry standards. I'm a nurse, but I can see intuitively that we need to go in this direction. And so trying to explain it, I get wordy.
+
+Jerry D - D2I   44:59
+And.
+And we're and and you made a good point earlier when you said you know we don't necessarily have to keep the data in the ED OPS you know example as long as we can recreate it. You know what I mean there's certain there's certain elements of you know that we need to recreate it and we need to make sure we're we're representing the last two years kind of thing. So we'd have to cross that bridge but that's you know that's devils in the details.
+
+Sai Vootla   45:11
+Right.
+
+Greg M.   45:11
+Yeah.
+
+Jerry D - D2I   45:21
+But having the data in its raw format and being able to reproduce ED operations, you know, with all of the the caveats, you know, that's that that would be awesome. But there's a lot of minutiae involved in that one. So it might make sense for us for ED operations to, you know, it's it's handcrafted, massaged, played with. There's a lot of tweaking to make sure.
+What Jonathan refers to, it doesn't feel right or it feels right. Like he's very, very touchy feely when he explains the data and the trending and the reports that he does. So this is super over curated ED operations, you know, but that idea is sound like having the ability to reproduce it. It's just just trying to.
+
+Sai Vootla   45:54
+Mitchin.
+
+Jerry D - D2I   46:00
+Can you imagine at least some of the some of the massaging and and and the tweaking and I spent three days this week going over you know we have a new client and just a minutia of OK in this situation we do this and and we're we're creating a timeline and it's very curated like it's not just static data points. There's a lot of back end logic for establishing when a patient was placed in like an observation status.
+You know, there's a lot of minutia. When was the doctor assigned? You know, there's a lot of minutia. So that would be that's difficult, doable, but difficult, you know?
+
+Greg M.   46:27
+So again, that's why I refer to it as our analytics layer. And how does analytics work? You start with the answer you want and then you find the the process of working the data to get to that answer. And that's what this this arm of the business does is.
+
+Jerry D - D2I   46:31
+Mhm.
+
+Surya Jonnavithula   46:40
+Correct. Correct. Yeah.
+
+Sai Vootla   46:41
+I.
+
+Surya Jonnavithula   46:44
+Yeah.
+
+Sai Vootla   46:45
+Absolutely, because why I asked this question was because from my experience, the reporting and analytical requirements evolve, keep changing. Something that we are looking at to success from the same data today might be obsolete 6 months, one year down the line.
+
+Jerry D - D2I   46:55
+Mhm.
+
+Greg M.   47:02
+Exactly.
+
+Sai Vootla   47:03
+And we might build all new set of reports and you know analysis in future so that this layer is where it's like it's basically built by it comes by the reporting requirements or app analysis requirement.
+
+Jerry D - D2I   47:08
+Yeah.
+Yeah.
+Yeah. But there's also the year over year element to that. And sorry, I keep, I keep talking because a lot of what we do in this is we're keeping so much data online because we do a year over year because they made a change, you know, like they do a workflow change and April of last year compared to April of this year, we want to see what the impact was. You know, that's all that management of of you know.
+
+Sai Vootla   47:20
+But the little bit, yes.
+Right.
+
+Greg M.   47:38
+So.
+So brings us to exactly what we're doing here is that foundation level of data. After we ingest it, we want it unmolested but identified so that it becomes dynamic and we can build that analytics layer, we can make all the change, but it's that foundation is solid.
+And that's what we're looking for is that that solid foundation data architecture to then build off and do all the other stuff with.
+
+Sai Vootla   48:06
+So do we have like like a data flow either you know that I can see like from from what I understand are these all like DTS packages or?
+
+Greg M.   48:18
+All right, I'm gonna stop. This is where Jerry takes over.
+
+Jerry D - D2I   48:19
+Can you open up? Oh, you stink. You were driving so well. Hold on.
+
+Greg M.   48:24
+I know, but I don't do the the the VS.
+
+Jerry D - D2I   48:29
+OK, hold on. I I have to let me get. I wasn't as prepared as I should have been. Give me one moment to to show you basically what we're doing. So what we did was we compartment, we we kind of broke this into pieces. We we we have like what we call raw, raw processing and ingestion. So that's loading it into that you know unmolested layer that Greg showed the raw tables.
+
+Sai Vootla   48:33
+And.
+Sure.
+Can I?
+Mhm.
+
+Jerry D - D2I   48:49
+We have a core processes where we we load up the stage tables like the demo orders, meds and prescriptions and then we have what you know we classify it as non core which is you know everything else. So you know all the historical data, all the results data like all the all the big bigger data sets that aren't used in our day-to-day processing and support a business.
+We have a different ETL process called non-core. So we kind of broke it into three pieces. It also allowed us to have, you know, alerts along the way. Like when we get we're expecting 20 files, we only got 18. So our raw process would stop and say, OK, you only got 18 files. It would alert somebody so we can see, OK, do we can we continue processing this or is an important file, you know, not there stuff like that.
+So what we do is I have different VSVS packages. So we have a like AC sharp, an older C# script we call our file a file download automation that basically is monitoring every 10 minutes. It goes and checks all of our different places for data. Sometimes it's remote, sometimes it's it's data that was sent to us. So we're checking.
+We have a list of remote sites where we have SFTP credentials that go out to like a hospital system or an RCM vendor. You know, somebody hosted the data remotely and we pull it in. As soon as we pull it in, that triggers downstream processes where the raw import will kick in. Once the raw import's done, the core will go and then like the the.
+Archive or non-core, like it's it's kind of tiered like we we queue everything up. We don't do a lot of parallel processing unfortunately. So that's one of our stumbling blocks is you know if we get six sets of data and you know when we look today they'll get queued up. So the first will go the 2nd, the 3rd, the 4th, the 5th instead of like all six going off at once. It's just the the way you know the model was.
+Was in in the resources we had available, we didn't really have the maturity to set up parallel processing. So ultimately as I'm talking away, I'm trying to open up an example. So give me let me show you my BS.
+
+Greg M.   50:37
+Yeah. So that that's another thing to say on the on the hardware side, essentially everything we're doing is on a terminal server.
+
+Sai Vootla   50:43
+Mm.
+Right. So, so at the same time we like to read, we are reading the data, we are writing the data, we are processing in the same instance.
+
+Greg M.   50:47
+It's not even a data server, you know, so we have.
+
+Jerry D - D2I   50:51
+Yep.
+Yes.
+
+Sai Vootla   50:54
+OK.
+
+Jerry D - D2I   50:55
+It but it goes to us. It all lives in a separate sequel instance. So we're we're doing our we're doing our ETL, our file, our file.
+
+Sai Vootla   50:59
+Take instance.
+
+Jerry D - D2I   51:07
+Ingestion, like going and getting the files, our archiving and our ETL processing all lives on the same box right now. And that's you know that it's it's starting to show its age. So I'm gonna go up one, so RWJ.
+
+Sai Vootla   51:12
+OK.
+Right, right.
+OK, can I can I take a quick two-minute biological break? 3 minutes?
+
+Jerry D - D2I   51:25
+Yeah, good. It's gonna take me a minute to pull up this thing anyway.
+
+Sai Vootla   51:28
+Yeah.
+
+Jerry D - D2I   51:57
+Where am I?
+Pull up. This is RWJ.
+K.
+These are ugly.
+
+Sai Vootla   53:41
+I'm back.
+
+Jerry D - D2I   53:43
+Welcome back.
+Ultimately I'm just build, I'm just, I'm I'm pulling up the the three different tiers I was talking about for one of our ETL data sets.
+
+Sai Vootla   53:46
+This.
+
+Jerry D - D2I   53:55
+I'm using that term incorrectly. So ultimately a lot of this is driven by the data set. You know, Greg had showed you our list of different clients with all the different hospitals. Sometimes we'll get a collection of like 10 hospitals in one data set and this is representative of that, so.
+Just going up the one more.
+So ultimately you know we get files they get dropped into like we have an archive, we have a a drive on our Windows server that's considered our archive and we you know we we store the files there. We're also moving we're we're we're also using Amazon S3 as our long term.
+You know, archive. So as these things age out, we try to keep, you know, a calendar year in support of MIPS. We keep a calendar year worth of data in, you know, readily available for our ETL processes and we move everything else to long-term archive. The files are will show up on our SFTP folder or we'll get them and then we'll drop them in here. We'll normalize the files.
+
+Sai Vootla   54:54
+So, so goodly SFTP server Jerry, but they've been pushed to the SFTP server and then.
+
+Jerry D - D2I   54:54
+Else.
+Uh, well, no.
+So we have we when let me take a step back. So we have a couple scenarios. The hospital will create the files and they'll send them to us. So we have two SFT PS. We have an old legacy Windows based SFTP server that we're trying to migrate from and we have an A WS.
+
+Sai Vootla   55:04
+Um.
+
+Jerry D - D2I   55:24
+SFTP that uses S3 as its back end for storage. So we either go and get it like the client will say, OK, here's credentials, go pick up the files or we'll give them, we'll give them SFTP credentials to say, OK, here's your username, login, we'll white list your IP address, drop the file.
+
+Sai Vootla   55:27
+OK, OK.
+
+Jerry D - D2I   55:44
+Files off here and then we have a we have a an automated process that goes and monitors all these different places and says OK, there's files, grab them and then trigger you know the the downstream process of you know, raw import, core, etcetera, all those different ETL processes to import the data.
+
+Sai Vootla   55:58
+And and what tool do we use here to identify that? It's like is it an event based where it finds a new file and then just picks the file and then dumps it into the S3?
+
+Jerry D - D2I   56:12
+Yes, we have. I think it's originally it was AC sharp script and we have like a a Jason. Basically it's an entire C# driven process. I believe it's running off of a scheduled task like every 10 minutes or something. It goes and looks and checks all of them until you know, checks every single SFTP and says OK, I got a file and then that you know.
+Pulls the, pulls the file down and then within that process we trigger a OK, we got the file, go through your file, check if we have the right amount of files, import them. If import, you know once the raw import is done, trigger the core ETL process that loads it to our our data warehouse and then if we have non-core, which not every site does, it'll then.
+And say OK, you know core is done, so now you can do non core and it just cues all those different processes up within the application and that's something we can say that again.
+
+Sai Vootla   56:56
+Pass it and it runs out of sorry. And is it based out of any metadata or any kind of configuration information that's stored that knows where to put the file?
+
+Jerry D - D2I   57:11
+That's all done here. So we we have the routing and every there is there's a Jason file that says OK, here's the SFTP you need to look for. When you get files, put them here. Like that's all within the the that Jason file and I'll have to get one of the guys to to show you. I can pull in Kyle or Shook for probably tomorrow because Kyle's not feeling.
+
+Sai Vootla   57:14
+Talking.
+OK.
+
+Jerry D - D2I   57:31
+Well today, but I can pull him in tomorrow if we want to look specifically at that process. I don't like messing with state sites, JSON because it's an active file. So ultimately where is it? And this core import. So we got files and what'll happen is the automated process will trigger off.
+
+Sai Vootla   57:32
+Oh, sure.
+Oh.
+
+Jerry D - D2I   57:51
+This DTS package and what this ultimately is, is we're using VS tools to import into our raw tables. You know, it's pretty straightforward. What we do is every day we have an archive process. So every day we clean out the raw tables, load the most recent data, put that into raw tables once this is complete and there was no errors.
+
+Sai Vootla   58:08
+Oh.
+
+Jerry D - D2I   58:09
+You know, we'll also, you know, we we also have depending on the ETL, we'll we'll archive and send these files to S3. Usually it's like flow sheets or like notes data, so we can trigger different processes. We have a docker component as well. I I don't want to get too deep into the weeds right this second, but just to give you the high level. So we have our raw import process once that's complete.
+The the automation will say, OK, Raw's there, the data's available, it passed our QA. Now trigger this and this is where we build those stage tables. We go through all the various process and this is all that minutiae I was talking about where we support different workflows. We establish, you know, doctor assignment, mid-level provider assignment. There's all custom logic in here to establish ultimately build out that.
+
+Sai Vootla   58:40
+No.
+
+Jerry D - D2I   58:49
+Timeline based on the workflow, you know what the doctors want to see, a number of different elements we load our.
+
+Sai Vootla   58:54
+And this is specific to one physician group.
+
+Jerry D - D2I   58:58
+Yes.
+This is specific to, it's actually a data set. So it's one of the hospitals that the physician groups work in. So for this one, it's Robert Wood. You know, Robert Wood has, I think it's 15 or 20 different hospitals that are in this data set.
+
+Sai Vootla   59:06
+Oh, well, OK.
+
+Jerry D - D2I   59:15
+I know it's a lot, man, so ask any questions you have.
+
+Sai Vootla   59:15
+So, so, so, so this DTS pack. I'm just trying to understand the the the the grain level at which we have these DTS packages like is it for we have one DTS package for physician group.
+Hospital or?
+
+Jerry D - D2I   59:33
+It's, it's the, yeah, the hospitals. So the way we break it down is I call it data set. OK. So what that means is we, you know when Greg broke out the our here's our position group and you know there he showed the Alteon example where we had a Bayshore hospital, we had another hospital, you know a couple different there was like 6 or 7 different.
+Hospitals within that that seven hospital group, you know five of those hospitals come in one data set, the other two come in a different data set. So the best way we could manage this was you know we're triggering off of we received files in this data set.
+We also handle all of our ETL specific, you know, manipulation of the data at the data set level. And the reason for that is because different hospitals do things differently. So you know, one Uh will treat patient, you know, patient triage another way in this other Uh will have a physician in there and we have to account for all that in our ETL and that's.
+
+Sai Vootla   1:00:17
+Right, right.
+
+Greg M.   1:00:27
+Correct not.
+
+Sai Vootla   1:00:29
+Right, right.
+Right, right.
+
+Greg M.   1:00:30
+So I guess the explanation is not all hospitals have a unified EHR. So hospital systems that have a unified EHR will get one feed that has multiple hospitals in it. But if the hospital system has a non unified EHR then we're going to get one feed for each hospital that they.
+That you know. So basically we have to write one of these ETLs for each data feed that we get, and that data feed can have multiple hospitals. It can only have one hospital.
+
+Jerry D - D2I   1:00:55
+Mhm.
+
+Sai Vootla   1:01:00
+Absolutely, yeah. So this is more like we get the raw data, we do basic like cleaning the data, linking the data with master data and then create more like a like like a bronze layer which is more now this data can be.
+
+Jerry D - D2I   1:01:11
+Mhm.
+
+Sai Vootla   1:01:18
+Used for further analysis or whatever down the line.
+
+Jerry D - D2I   1:01:24
+Mhm.
+
+Sai Vootla   1:01:26
+Am I correct or or is this like because from what I understand here is we're trying to transform the data. Are we transforming data here or we just?
+
+Jerry D - D2I   1:01:30
+OK.
+We are transferring the data here, yes.
+So in this.
+
+Surya Jonnavithula   1:01:40
+So, so on that point, on that point, so you said earlier also when you get the data from the SFTP servers, you transform and directly load into your common data layer model, right? There is no raw stage as is data, you don't keep it.
+
+Sai Vootla   1:01:41
+This is.
+
+Jerry D - D2I   1:01:43
+Mhm.
+
+Surya Jonnavithula   1:01:57
+Anywhere.
+
+Jerry D - D2I   1:01:57
+We no, we don't. At this time we do not because we what we're doing is we're everything gets transformed just because we have that problem where every programmer takes liberties with our code and we can't trust it. So we have to we we ultimately try to standardize it to you know a raw table layer with minimal manipulation.
+
+Surya Jonnavithula   1:02:01
+Correct. Yeah, yeah.
+Yeah.
+
+Jerry D - D2I   1:02:16
+The next step is that core process I'm saying, and that's where things get manipulated and put into the common format, depending on what we're doing.
+
+Sai Vootla   1:02:17
+Right.
+
+Surya Jonnavithula   1:02:17
+Yeah.
+But don't you have some issues today with that process? For example, Cedar comes and says that that we need some more details. You go there and you find that there is some discrepancy. Yeah, that's what it is.
+
+Sai Vootla   1:02:25
+Absolutely.
+
+Surya Jonnavithula   1:02:39
+Then you don't have the raw data that came from the the physician group for that particular patient and somehow you got that value, but you're not sure whether that value is correct or not. Maybe there was transformation error.
+
+Greg M.   1:02:53
+Yeah, and so part of our QA is sometimes we have to go back to the raw text file, say, oh ****, the data was there. Now we have to rewrite the ETL. We have to drop all the old data that we loaded and repave it with, you know, the the correct, you know, again, it's a static, you know.
+
+Surya Jonnavithula   1:03:04
+Yeah.
+Yeah.
+
+Greg M.   1:03:13
+Have a lot of static steps.
+
+Surya Jonnavithula   1:03:16
+So my question is, let's say if it happens six months later, that question comes, do we have that raw data to go and then check that you missed few records?
+
+Jerry D - D2I   1:03:23
+Yes, we keep it all, but it's in that flat file format. We don't keep it online. That's what that's where the reload of gap is. We keep all, we we keep every single piece of data we've ever gotten unmolested. And part of, yeah, we we we have all the files that we've ever gotten ever. We don't ever get rid of anything.
+
+Surya Jonnavithula   1:03:28
+OK, yeah, correct. OK, so that flat file.
+OK.
+
+Sai Vootla   1:03:36
+OK.
+
+Surya Jonnavithula   1:03:41
+So are they sitting in the SFTP servers or you have some other system?
+
+Jerry D - D2I   1:03:41
+And but.
+No, we're there. It's a combination of the the G drive that I showed earlier.
+
+Sai Vootla   1:03:49
+And there's three, I guess, yeah.
+
+Jerry D - D2I   1:03:51
+And S3, yeah, ultimately we I want all this stuff on S3 like what what we're trying to do is transform it. So you know the ingestion process, the SFTP, you know us going and getting files that will all land on S3 and then we can route it elsewhere as needed. You know I don't, I don't want it. I don't want AG drive like this thing is gigantic right now.
+
+Surya Jonnavithula   1:03:52
+OK, OK.
+
+Sai Vootla   1:04:00
+Right.
+
+Surya Jonnavithula   1:04:02
+OK.
+OK.
+Yeah.
+
+Jerry D - D2I   1:04:08
+You know, I have a I have a this is 12.6 terabytes and we've been archiving. So I I have much more terabytes worth of data, raw files that are sitting in S3 in deep in deep storage because we don't need to access them at this time.
+
+Sai Vootla   1:04:09
+Right.
+
+Greg M.   1:04:23
+And then I I the the amount of processing time on this server that we blow just in zipping up these files.
+
+Sai Vootla   1:04:30
+Right, right.
+
+Jerry D - D2I   1:04:30
+Yeah, so I I want to ingest right into S3, keep it in its native format and have a metadata layer to say, OK, this came from here, this belonged to here, this, this is this, you know what I mean? I that that's part of, you know, part of what we want to do is be able to to bag and tag, for lack of a better word, the raw data we're getting so we know what to do with it.
+
+Surya Jonnavithula   1:04:30
+Yeah, so.
+So, so one question there, one second Sai. So today if you got a raw data and then it is transformed, put into common data layer model, let's say you missed few records. You don't know that, right? Do you know you have a system mechanism?
+
+Sai Vootla   1:04:52
+Right, we we I didn't even want.
+
+Jerry D - D2I   1:04:55
+Mhm.
+Mhm.
+
+Surya Jonnavithula   1:05:11
+That that you missed Fury cuts.
+
+Jerry D - D2I   1:05:16
+We load everything we get. So there's there's processes built in with our ETL level that identify that we got you know we received 100 lines in this file. All 100 lines were loaded like we we we do have it's very basic but we have the we we have some QA you know.
+It our process is built in such a way where you know we want to make sure that doesn't happen. You know what I mean? Like we're we're investigating all the data like the the process is mature enough where I I have the team loading the data as is. That's where that raw, those raw tables come from.
+
+Surya Jonnavithula   1:05:40
+OK.
+
+Jerry D - D2I   1:05:51
+So I basically other than you know the the the column names might be different, we'll normalize the column names, but we're not manipulating that data in any way. We're putting it into SQL tables as is. That assists with our QA. That allows us to go back to the well and say, OK, if we miss something in our ETL process, we we still have the unmolested data to reference.
+
+Sai Vootla   1:06:00
+Right.
+
+Jerry D - D2I   1:06:09
+So that's where our raw, our raw process comes from. So I try to keep it as native as possible. We don't manipulate the contents, we'll manipulate like column names, but that's it. Like I don't want people going in and and erasing or messing with data because that opens up that can of worms that you just outlined. Yeah, I don't want that. So I I try to be as we try to get the data as unmanipulated as possible before.
+
+Surya Jonnavithula   1:06:22
+Got it? Yes.
+
+Jerry D - D2I   1:06:28
+Before we start doing ETL on it.
+
+Surya Jonnavithula   1:06:30
+OK. OK. So that's good. All right.
+
+Jerry D - D2I   1:06:32
+OK.
+Yeah, we I I tried not to build that in because that that happened before I came on board. And one of the things I changed when I when I came to D2I was OK, you got to stop manipulating the data and going directly to prod tables. There's got to be interim steps where you can do QA and make sure your data is not messed with. You know, we were doing a lot of the manipulation right up front on the raw data and it was causing problems.
+So that's why we we have a much more complex process now.
+
+Surya Jonnavithula   1:06:57
+So this intermediate data, where are you storing if you're if I call it as intermediate data, where the QA is done?
+
+Jerry D - D2I   1:07:05
+Basically it it depends on the, it depends on what we're doing with it. So for one of our clients, we keep two months of data online unmolested and that's our EMP for our daily customers like this, this is one of our daily customers. So we get a set of a set of files every day.
+We take what we received. We end up getting anywhere from three to five to seven or even 10 days. Like we go 10 days back, for example, and say, OK, give me every visit for the last 10 days and send it every day. You know what I mean? So that way we can get the complete package because what happens is it's it's a living encounter. So if they came in at 11:00 yesterday.
+
+Surya Jonnavithula   1:07:36
+Mhm.
+
+Jerry D - D2I   1:07:43
+I'm not going to have a complete record when I get files, when I got files this morning because they're still in the Uh. So when I get the files tomorrow, it'll include all the data that was today until they're discharged, be that inpatient, go to an inpatient status or if they're they're discharged from the Uh entirely and go home like we get that data. I'll continue to get that visit 5710 times so I can get.
+As complete data as possible. So what we do is we take.
+
+Surya Jonnavithula   1:08:04
+Hmm.
+
+Greg M.   1:08:05
+And it also allows us to capture back charting because sometimes the physician will, you know, people won't chart until the next day anyhow.
+
+Jerry D - D2I   1:08:11
+Yeah. So we end up reprocessing the same set of data up to 10 times and and it every time we get it, it's a little better. You know, sometimes it's, you know, for towards the tail end of that cycle, it's it's the same data over and over again. So we're wasting cycles. But the alternative is we're missing data and we have incomplete, we have incomplete data because.
+
+Surya Jonnavithula   1:08:12
+Google.
+Yeah.
+FedEx.
+
+Jerry D - D2I   1:08:31
+Because we ignored it. So the best compromise we could come up with was get the same data set multiple times because that'll allow for like results, blood, blood cultures for example. It can take up to a week to get that back because they send it out. We would never get that result if we didn't ask for the same set of data or have the code understand that hey, this changed in the 10 day window.
+Window send me that information like we on the front end our code is set. So we are looking for change in the data set because it's kind of a slice in time. When when I run that script at 7:00 AM this morning, you know I hope I have the most complete data but these.
+Electronic health records handle this differently. Like for Epic, for example, they have a Clarity database, so we're not pulling data from their live system. They have a report environment called Clarity, and periodically throughout the day, sometimes it's, you know, one time a day, sometimes it's multiple times. They'll update from production to Clarity.
+And we'll get, you know, whatever's available at that time. It's not complete data because it's still, you know, it's not live production. They won't let us report off of that. So we're always a day behind, like we're always have a foot in the hole for Epic because we're we're always grabbing old data. So the way we we handle that is we have triggers in our code to say, OK, look for certain fields that were updated.
+
+Surya Jonnavithula   1:09:37
+Yeah, yeah.
+
+Jerry D - D2I   1:09:46
+In this time frame, so we can pull that data, even if it's two weeks old, it was changed yesterday. OK, I want that data and then we ingest it and we keep all this flat files and part of the ETL processes. OK, give me the latest and greatest, you know what I mean? Identify this is this came in today, so this is has to be better than what we had yesterday. So let me process today's data.
+
+Surya Jonnavithula   1:09:52
+Mm.
+OK, yes.
+
+Jerry D - D2I   1:10:06
+And that'll get me a complete picture. And then we do a bunch of ETL and and and we review the raw data for missing elements. Like we do a bunch of stuff in ETL to make as complete a process data set as we can, like we're kind of putting a puzzle together.
+
+Surya Jonnavithula   1:10:06
+That.
+Yeah I OK
+OK, you got it. So if why seven days? Uh, two days is not enough. Um.
+
+Jerry D - D2I   1:10:20
+So that's how we handle it, yeah.
+
+Greg M.   1:10:39
+And.
+
+Jerry D - D2I   1:10:39
+We would be missing out on orders because they're still in the care of the Uh.
+
+Greg M.   1:10:39
+It.
+The other.
+The other major reason is that if they have an outage and they don't output over the weekend, we would lose 3 days of data. And if we were going back seven days, it wouldn't matter. On Monday we would get a repave of the entire weekend and all the data that we missed.
+
+Surya Jonnavithula   1:10:59
+Yeah, got it. Yeah. OK, perfect.
+
+Jerry D - D2I   1:10:59
+Yeah.
+
+Greg M.   1:11:00
+Otherwise, we'd have to ask for a gap. You know, we'd have to tell them, look, we missed two days last week. Can you send us just those two days? So it it just.
+
+Jerry D - D2I   1:11:07
+And that doesn't work. Yeah, we started with three days just for that weekend, you know, weekend outage, but it turned out it wasn't enough. So you know, we went, I think the longest we go back is 10 days for ED for inpatient. It's a little different. You know that that that has completely different workflow because these patients can spend weeks in the hospital. So for those situations we go back further.
+
+Surya Jonnavithula   1:11:09
+Yeah.
+OK, so so I I.
+
+Jerry D - D2I   1:11:27
+You know, we'll do like a 30 or 60 day window.
+
+Surya Jonnavithula   1:11:31
+Yeah, perfect. So I summarize it as you're getting the last seven days of data and you made a statement that you're reprocessing the same thing again and again for the for the for the better to make the whole data better, better, better.
+
+Jerry D - D2I   1:11:39
+Mhm.
+
+Surya Jonnavithula   1:11:47
+That is undesired, but necessary to do it right. There is nothing we can do about it. Yeah, I mean more I'm talking about, more I'm talking about going into the future state that we are trying to design in that is that is something we can't avoid because that is at the client end issue.
+
+Jerry D - D2I   1:11:50
+We, yeah, our hands are tied just because of the way the data is available to us. You know, we have to take into account.
+
+Greg M.   1:12:06
+Yeah, but you can get into the kind of hashing stuff and knowing being able to not process stuff that I've been tinkering with as I'm trying to do this stuff is that I will keep a a mutable hash and an immutable hash. So I have a.
+
+Surya Jonnavithula   1:12:24
+No, no, no, Greg, Greg, Greg, I understand. So how we may handle it maybe different efficient way, but we have to handle it. That's what I mean.
+
+Greg M.   1:12:25
+OK.
+
+Jerry D - D2I   1:12:32
+Yeah, he's highlighting the point that this is, this is a we we can do this better, I think. And and correct me if I'm wrong. Yeah, there's there's better ways of doing this. And that's part of what we're asking for. You know what I mean? What's the modern way of doing it? Like we're we're not, we're not tied to this system like we're doing the best we can.
+
+Greg M.   1:12:33
+Correct. Oh, OK, yeah.
+
+Surya Jonnavithula   1:12:34
+Yeah, yeah.
+Yeah, absolutely. Agree.
+Yeah, perfect. Perfect.
+
+Jerry D - D2I   1:12:49
+And there's definitely better ways. And and Greg and I are are very open to change. So don't feel that, OK, I gave you this model, you got to replicate this model or whatever. No, that's not what we're saying. Like we're we're very open to, you know, your experience, your expertise. That's one of the reasons we engaged in this.
+
+Surya Jonnavithula   1:12:53
+Yeah.
+Yeah.
+Yeah, no, I'm just trying to understand. That's a constraint we have to live with, but we can definitely make it modernized. Yeah, so.
+
+Jerry D - D2I   1:13:07
+Yeah, yeah.
+Yeah, even just talking about it in my head, I'm saying, OK, we could do this and do it better. We could do that and do it better. It's just I I haven't, I don't have the staff, you know what I mean? It's just one of those things where if I had a team of 50 people, sure, I could throw all these ideas and we'd do better. But with the limited staff that I have, you know this, we're doing the best we can and it's really good.
+
+Surya Jonnavithula   1:13:17
+Oh yeah.
+Yeah, I'm sure Sai Sai already thinking some ideas there, but sorry to interrupt Jerry. Yeah, Sai you.
+
+Jerry D - D2I   1:13:35
+No, no, not at all. Like I said, talk over me or you're never going to get a word in.
+
+Surya Jonnavithula   1:13:41
+No, no, no. This is really going very well, very well. I'm noting down as much as I can, but I have recording too. Sai, go ahead.
+
+Jerry D - D2I   1:13:45
+Good, I'm glad.
+Yeah.
+
+Sai Vootla   1:13:50
+Yeah, so but just going back to the raw data, right, I'm more I'm still in my raw ingestion S3 assuming that I get data there is AC sharp.
+
+Jerry D - D2I   1:13:54
+Mhm.
+
+Sai Vootla   1:14:06
+This application that reads the data and dumps it into folders. Do we maintain snapshots there like like as data comes in? Like I picked some data set in the morning at 10:00 AM. I'm gonna see the same data set again when I go do that at 10:00 PM for.
+
+Jerry D - D2I   1:14:07
+Mhm.
+
+Sai Vootla   1:14:25
+For whatever reason or after two hours, do you maintain like a snapshot of the same data set that we receive?
+
+Jerry D - D2I   1:14:31
+What we'll do in that situation is it'll be treated as a separate archive folder and then ingested. So what would happen? You know, right now in our archive we have a dated folder structure, so depending on when it was received, if we have the correct number of files. So for example, we get 20 files every day, we got 20 files at.
+At 10:00 AM, our process would say, OK, process these files, you know, go through all the ETL process. We built the ETL to take that into account that we may get duplicative data. So we can definitely handle that. We get the same set of files at 10:00. There's 20 files. Our process is done. It'll say, oh, these are new files and it'll kick off and reprocess the entire data set again.
+
+Sai Vootla   1:15:09
+Hmm.
+
+Jerry D - D2I   1:15:11
+But it's like I said, it's just one of those things that's built over time. So we haven't had the time to improve it. But ultimately you know what that would be represented at in our G drive, which is a Windows environment. You know we have different folders where we we keep different archives for Blue Water.
+
+Sai Vootla   1:15:15
+Right, right.
+Yeah.
+
+Jerry D - D2I   1:15:27
+I have, you know, we work everything out of, you know, our current day. This is probably the wrong one. We work everything out of our current day. So this is the most recent set of files we got. So we got files today. The details aren't here, but we got files this morning and they basically come with this non-standard name.
+
+Sai Vootla   1:15:42
+Right.
+
+Jerry D - D2I   1:15:44
+So we have a process that normalizes the name so our ETL process can pick it up, load it into the tables, knows what target's getting, etcetera. OK, if for the same time we create an archive folder, so we got files at 7:09 today at 10:00. If we got another set of files in half an hour from now, we'd have another folder that says 2005 0709.
+
+Sai Vootla   1:15:51
+Got you.
+
+Jerry D - D2I   1:16:04
+9 It'll say you know 1500 hours and that that would get dumped in here. This would all get cleaned out. The new files would get put in here and our process would pick it up and go through all the ETL processes.
+
+Sai Vootla   1:16:15
+So once the data say comes into current day new set and then we move it to a folder and then we get new set of files in the current day. Now once from the current day.
+
+Jerry D - D2I   1:16:19
+Mm-hmm.
+Yep.
+
+Sai Vootla   1:16:31
+Files from here this is is this is a source for my DTS package that I'm seeing in the background.
+
+Jerry D - D2I   1:16:39
+Yes, this is basically it's gonna say, OK, I have new files. It's gonna merge and rename to normalize the names. It's gonna do our file check process to make sure we have the correct amount of files. You know, they're they're not blank. You know that we don't just have headers like we basically have a process that says OK.
+
+Sai Vootla   1:16:48
+House. Yep.
+
+Jerry D - D2I   1:16:55
+I have a hard stop because it didn't pass my check. From there we go through and clean out what's ever in the raw tables, load all the new files that are in here. Yeah, load all the new files that we just got. There are sometimes additional stuff where we'll route it to S3. When when we see this kind of thing, we have a Docker process for our notes process.
+
+Sai Vootla   1:17:01
+The raw tables, new files, yeah.
+
+Jerry D - D2I   1:17:14
+It was a very CPU and RAM intensive process. So instead of trying to do it in ETL like we were doing here, we created a modern process that basically spins up a Docker container and does all that work using Python scripts, Postgres, puts that all into a Postgres server and then at the end of the day.
+Everything.
+Loaded into that Postgres we put into our SQL environment data warehouse. So these extra steps aren't standard. Like these steps you'll see probably in every single ETL because we get the same data set. But these extra steps are usually like additional stuff specific to the data set. Like we're trying to route notes or we're trying to do flow sheet stuff. Like some of this stuff is just extra, but this is usually the standard. You'll see these are standard.
+
+Sai Vootla   1:17:44
+Mhm.
+
+Jerry D - D2I   1:17:55
+You know this stuff is standard. You know the truncate loop is standard. This is like the standard way we handle data. The entire file, the entire file set received gets loaded every day.
+
+Sai Vootla   1:18:05
+Perfect. So so this this one data flow is replicated for every client.
+
+Jerry D - D2I   1:18:09
+Mhm.
+For every Epic. So this is an Epic data flow. Yeah, it's EHR specific. So we get, you know, we get different files from Epic versus a Cerner versus AT systems versus a Meditech. Yeah. So we we basically have different like if it's an Epic data set, this is what we're gonna follow. If it's Cerner, it'll look slightly different, you know what I mean?
+
+Sai Vootla   1:18:14
+Epic, yeah.
+Sir, no, absolutely so.
+Perfect. Yes, yes. It's based on the data source, the different system, right? The different types of data that we receive. So am I correct in assuming that I say I have 20 different type of systems, I only have 20 irrespective of the client?
+
+Jerry D - D2I   1:18:32
+Yep.
+Yes, we basically we create just maybe I can answer we basically create the the raw core and non core specific to the data set. So it should be you know it's we try to normalize it like Epic. We try to get the same Epic from everybody. We try to get the same Cerner for everybody. There's always you know we're pretty good about getting the standard.
+
+Sai Vootla   1:18:49
+Or.
+Right, yeah.
+
+Jerry D - D2I   1:19:08
+But yes, every single data set has its own ETL process.
+
+Sai Vootla   1:19:12
+Every data set has its own I'm just saying. So this this is for Epic right? So any any client where I'm getting data for Epic data.
+
+Jerry D - D2I   1:19:21
+Yeah, this is an epic site.
+
+Sai Vootla   1:19:27
+I'm not this is 1 package. We not develop any more packages. It just we run this package for that specific folder and then and then we kind of dump it into S3.
+
+Jerry D - D2I   1:19:27
+Mhm.
+Mm-hmm.
+
+Sai Vootla   1:19:43
+Or in any you know location and also the SQL tables.
+
+Jerry D - D2I   1:19:45
+It.
+Yeah, so the the I I could probably do a visual to help with this and I'll do that later today and I'll send it your way. I have. Let me see one second I might have.
+
+Sai Vootla   1:19:54
+Yeah.
+
+Jerry D - D2I   1:20:00
+I'm not sure if I'm still sharing, but I tried to pull up what documentation we had. I'll find it later, but ultimately I have a visual that might help, but ultimately it's, you know, the way it is.
+
+Sai Vootla   1:20:05
+Sure, Sir.
+
+Jerry D - D2I   1:20:11
+We receive files from SFTP. They get placed in this archive infrastructure specific to the data set. So every single one of these is a data set.
+OK, within this we have, you know, our there's archive, a bunch of archive data in here. There's each each time we get a file, it's broken down to the, you know, the minute. If we get multiple files, you know, get a set of files multiple times a day, it'll have a folder.
+
+Sai Vootla   1:20:22
+Right.
+Right.
+
+Jerry D - D2I   1:20:37
+For each, that's our archive folder and then the working folder is what we call current day. So the most recent set of files we received will get dumped into current day. The names will get normalized. Then we will run this raw package and what this does is it puts it into the raw SQL tables.
+Once that's complete, once that's complete and it passed all of our checks that are built into this, that'll then trigger the next ETL in the line, which is our core and this is a subset of the data. So this is like we're setting up the visit in our demographics table. We're looking at orders, medications and prescriptions. It's it's the basic data that we need.
+
+Sai Vootla   1:20:54
+Oh, OK.
+
+Jerry D - D2I   1:21:13
+We need to ingest as quickly as possible to support our business objects reporting because we're on a daily footing for that. OK, if we don't need it for business objects, that's when the non-core ETL comes into play. So we have a third ETL that says, OK, all the other data that we're dealing with, you know, if we have, you know the stuff that's in support of.
+Like the the extra, the extra 15 files we got from the site will then get processed in a in a later stage, either immediately after or if it's a big data set, we'll we'll schedule it for later in the day. And what'll happen is you know they'll basically be put into those normalized common tables we talked about where it's like we we we put the internal identifiers.
+We make sure we have the client ID associated. We have that master visit key that we were talking about. It all gets associated with this data and puts into, you know, kind of like a common table structure. You know that that it's manipulated though.
+
+Sai Vootla   1:22:03
+So here I have the so here these steps raw to stage and stage to your data warehouse table.
+
+Jerry D - D2I   1:22:12
+Yeah, stage to product, call it.
+
+Sai Vootla   1:22:14
+This is raw to stage and stage to prod.
+
+Jerry D - D2I   1:22:15
+Yep, we're on a stage stage to prod.
+So this is our raw to stage. You know, basically this is this is flat file to raw. I'm sorry if I'm confusing. I'm my brain's going very fast and I'm not explaining myself very well. I apologize. So this step is flat file to raw stage. So this is where our raw file, right? And the next one is.
+
+Sai Vootla   1:22:21
+So.
+Absolutely, yeah.
+Yes.
+
+Jerry D - D2I   1:22:37
+Raw stage, basically stage to prod. So we take the raw data, we stage it, we have an interim, an interim set of tables that mirrors the prod and we basically do all our manipulations, normalize the data, clean it, DQA. From there we then write to our production tables. So we we take the stage, you know basically the mirror of productions, our stage table.
+We then write that to our production table so we can, you know, use it downstream. So it's.
+
+Sai Vootla   1:23:02
+So I my one question Jerry here. So I have so now I understand till raw. Makes sense. You know it's like a snapshot. Every time we truncate we get the latest data set.
+
+Jerry D - D2I   1:23:05
+Yeah, man, ask away.
+Yep.
+Mhm.
+
+Sai Vootla   1:23:17
+It's incremental most of the time we get the data which we we read the raw data. It's in tables now from raw when I'm going to stage so.
+
+Jerry D - D2I   1:23:20
+Yep.
+I.
+
+Sai Vootla   1:23:30
+Basically performing an ETL, not an ELT. Basically in from raw I'm performing an ETL, I'm performing a transformation and loading it to serve the reports.
+
+Jerry D - D2I   1:23:39
+Mhm.
+Where there's an interim step to there. So I understand what you're saying. The reason we do this and and it maybe it'll make sense if I explain why we we went this way. What happens is from raw we have a a an identifier. It's called an encounter number, right? Or a medical record number, right? These are identifiers that are specific for the.
+
+Sai Vootla   1:23:59
+Mhm.
+
+Jerry D - D2I   1:24:02
+Record. It's the patient that identifies the patient in the electronic health record patient. The encounter number is this specific visit. So when you walk in the Uh, you get assigned a number. These hospital systems use the same range of numbers. So what happens is I'll have a hospital in Ohio that's using, you know, 1234 of the same hospital in.
+
+Sai Vootla   1:24:11
+Right.
+
+Jerry D - D2I   1:24:22
+Florida, that's using 1234. If we try to load it to a common raw table, we end up overlapping because we don't have the right identifiers.
+
+Sai Vootla   1:24:28
+No, no, no, I I that was not my question. I'm my, my, my. Yeah, probably more. I was in. Now I'm in staging right now stage. I'm running this stage package.
+
+Jerry D - D2I   1:24:31
+OK, I I I misunderstood. Go ahead.
+Mhm.
+OK.
+
+Sai Vootla   1:24:42
+For again, is this only based on the source like Epic? Do I have one package for Epic?
+
+Jerry D - D2I   1:24:51
+We try, but it doesn't always work. But yes, there should be one one way to handle epic data. Yep.
+
+Sai Vootla   1:24:51
+Probably not. That's. Yeah, that's that's that's what I thought.
+Right, because why we don't have that is because my end result, the output of this package is different for different providers, clients.
+
+Surya Jonnavithula   1:25:11
+Mhm.
+
+Jerry D - D2I   1:25:12
+No, it's it's more, yeah, it it's a little different than that.
+
+Surya Jonnavithula   1:25:13
+I understood differently. I understood differently that the data coming in is slightly different, so your ETL has to change but output.
+
+Jerry D - D2I   1:25:20
+Yeah.
+Is the same. Exactly the same. Yeah. The the reason for that is because of all the manipulation of data that we have to do. So we, we, you know, we have to handle different data sets differently to build that timeline. You know what I mean?
+
+Surya Jonnavithula   1:25:24
+Should be saying, yeah, that's how I understood, yeah.
+
+Sai Vootla   1:25:32
+Right.
+
+Jerry D - D2I   1:25:39
+Also there's cleaning. So certain sites want certain things cleaned a certain way if we're doing metrics. So we we we we set up the patient timeline, but we also generate metrics associated like door to door to door to triage for example or total turnaround time that from the time you walked in the door until you had your outcome or left the Uh. You know these are all metrics we have to generate.
+
+Sai Vootla   1:25:53
+Yeah.
+But.
+
+Jerry D - D2I   1:25:59
+Certain sites want them calculated a certain way. Certain sites want certain times established a certain way. So those metrics look a certain way. Like we have to do all that stuff to avoid overhead on our production tables to avoid, you know, constantly writing and and and and messing with what we consider production table. We isolate.
+It into its own silo so I won't have to worry about something happening happening where if the wrong identifiers matched, it'll blow up the wrong site. We had a lot of stuff when I started where since he was doing all this stuff in production, the wrong visit was getting overwritten with bad data and we didn't know it was happening. So that's why I isolated it and put it into into stage once it's done being.
+
+Surya Jonnavithula   1:26:24
+Yeah.
+
+Jerry D - D2I   1:26:39
+Been cleaned up and processed and normalized. It then all goes to the same place, like this demo stage to prod. It's the same for everybody because we have the same, like we have exactly the same stage table format as we do for production and it's just a simple merge because we don't have to worry about it. So I have stored procedures, yeah.
+
+Sai Vootla   1:26:54
+That's was actually my my question. Yeah, that's where I was like, I'm like, if I look at this package, where can I draw a line where I say I could take these few steps away into silver. So where I'm like.
+
+Jerry D - D2I   1:26:58
+Yeah.
+Mhm.
+OK.
+
+Surya Jonnavithula   1:27:10
+OK.
+
+Sai Vootla   1:27:10
+Silver layer is more like common format.
+
+Jerry D - D2I   1:27:17
+Mhm.
+
+Sai Vootla   1:27:19
+But I'm not exactly format, but it's like more claims data for that system and provider or client.
+
+Jerry D - D2I   1:27:24
+Yeah.
+We could. The most manipulation of data is what we call demo. So that's setting up the patient timeline. So this is really custom to everybody. Like we'll have different sets of steps and logic and whatnot for this part. That's just one element that's demographics. We use multiple data, we use multiple of the raw files.
+Files to establish our demographics timeline. So we use events, we use orders, we use, you know, a couple different things. We have a log, we have, we have a number of different files that are used to create the demo timeline. But once we get to like the orders, the medications and the prescriptions, you know.
+That's pretty standard. Like it's pretty much the same. The the raw tables are all the same. The the logic used is all the same like that stuff. Like we we can basically do the same thing. You know this step right here. We can do the same for every single Epic Epic client because they're all the same.
+
+Sai Vootla   1:28:20
+It declined, yeah.
+
+Jerry D - D2I   1:28:22
+Yeah, you know the the individual data set like we can bring it all the way up to Epic. Like the our code for Epic is the same for every single instance. It should be, you know that where all of our modern ones, it's exactly the same because we standardized, you know, older stuff is a little different. But for our any any new client in the last two or three years we have the same.
+Output we're getting from every single site. So orders, match prescriptions, you know, all of our all of our files should be exactly the same. And we we could kind of, we probably could just get away with, you know, smashing those all together for lack of a better term and doing it the same way for everybody. It's the demo part up here where we're doing a lot of the manipulation and transformation, you know what I mean?
+There's a lot of logic on the back end to establish different things based on workflows. Hopefully I'm answering your question.
+
+Sai Vootla   1:29:06
+Right. So on top, what we do here is trying to get them to a standardized format so that the next steps can.
+
+Jerry D - D2I   1:29:13
+Yep.
+Yes.
+Once they're in production tables, we have processes downstream that'll move it over to ED OPS or you know, send it to MIPS for processing or you know, we have a bunch of of workflows downstream. You know, right now we're just in the normalization of data to make it usable from a raw format to a post-process format in a standard data warehouse model.
+
+Surya Jonnavithula   1:29:24
+Yeah.
+Yeah, yeah.
+Yeah.
+
+Jerry D - D2I   1:29:40
+I apologize. This is still confusing, man.
+
+Surya Jonnavithula   1:29:43
+This is good. This is good. No, no, this is good. So Sai.
+
+Sai Vootla   1:29:44
+No, exactly. I'm just trying to understand how the the data flow and the purpose of why we have these different steps and so from from the stage data, from what I understand from staging data is always temporary.
+
+Jerry D - D2I   1:29:50
+Yep.
+
+Surya Jonnavithula   1:29:55
+Yes.
+
+Sai Vootla   1:30:02
+Which is never. We never go back to old data which it's all say one week data Max in stage.
+
+Jerry D - D2I   1:30:10
+And stage is mutable. So what'll happen is stage will get cleaned out every time we get a new set of data, the what what we call production. So the stage to production, that production piece, that's the one that doesn't change. And Greg showed that represented that when he showed the ED demographics table. Greg, do you still have that up?
+
+Sai Vootla   1:30:27
+So from stage to prod, remember you said you'll always want to go back and process one week, right? So when you say approximately one week, do you need some? You need like one weeks of data in stage, don't you or?
+
+Greg M.   1:30:29
+Yes.
+
+Jerry D - D2I   1:30:29
+Yep.
+Yep.
+We get that because we get that in the the the raw data is representative of that five, that five-day window or seven-day window, right? Yeah. So that's how it works. It's just it increments a day every time we get it. So it's so when I get files today, it represents the last seven days of ED visits.
+
+Sai Vootla   1:30:53
+Oh, got you, got you. OK.
+OK.
+
+Surya Jonnavithula   1:31:03
+It's.
+
+Sai Vootla   1:31:05
+Oh, so so your snapshot is always last seven days data.
+
+Jerry D - D2I   1:31:08
+Yes.
+
+Greg M.   1:31:09
+Yeah.
+
+Sai Vootla   1:31:10
+Am I correct in that?
+
+Jerry D - D2I   1:31:10
+Yes, that there's other, there's other, yes, but that's exactly the the way to explain it.
+
+Sai Vootla   1:31:18
+OK, that makes sense. So every time you're basically dealing with seven days based on the source, it could be 5 days, seven days, some some systems can be something else. So we always get that, yeah, month.
+
+Jerry D - D2I   1:31:25
+Yes, exactly.
+Yep, some are a month. You know, it it varies.
+
+Greg M.   1:31:30
+Yeah, it will. And so a lot of many of our data sources are relying on the data service going back seven days. Some of our transaction, more transactional feeds we have transitioned to a we look at within the database if there's an updated.
+Or a created time for that transaction, then we're using that created time and not the date of service.
+This.
+Um.
+Not to complicate things more, but.
+
+Sai Vootla   1:32:06
+I yeah.
+
+Greg M.   1:32:06
+That way we always get, even if it's a month later and some result pops into the system, we'll get that result for that patient.
+
+Sai Vootla   1:32:15
+Right.
+
+Jerry D - D2I   1:32:15
+But it's it's built in such a way, yeah, it it's built in such a way that you know we're supporting a daily model where we'll get seven days. But say we have to process a gap, we get gap data, right? We have two years worth of data that we have to process because we're, you know, whatever's in raw gets processed exactly the same way regardless of how large it is or what time frame is.
+
+Greg M.   1:32:16
+It's a new entry in, yeah.
+
+Sai Vootla   1:32:26
+Right.
+
+Jerry D - D2I   1:32:35
+Presented, you know, our ETL is built to to account for that. So I can dump five years worth of data into raw, run my core ETL process and the data should come out exactly the same the same way with, you know, the most recent updated data. It'll come out the same way because we built the ETL to say, OK, be be aware of this is the newest data.
+Yeah, you know what I mean? Hopefully that makes sense.
+
+Sai Vootla   1:32:55
+Absolutely. So this is where I was coming to. So it's like if I have to go back and process five years data, I have to go and read through my raw and then perform the same activities that I'm like the top say if I scroll up like that's set.
+
+Jerry D - D2I   1:32:56
+Yeah.
+Yep.
+Yes.
+umm Yep.
+
+Sai Vootla   1:33:13
+Of getting into a common format, right?
+
+Jerry D - D2I   1:33:18
+Yes.
+
+Sai Vootla   1:33:19
+So my my question here is if if I read this data, I'm every anyway formatting the data into the format that I need, right? I'm not. It is not calculating or I'm not transforming any data, I'm just making sure that the data is formatted.
+
+Jerry D - D2I   1:33:29
+Mhm.
+
+Sai Vootla   1:33:36
+In a in a common format, let's put this right. So if we store that data always in stage, like stage remains based on say deduped and five years of data is always there in staging.
+
+Jerry D - D2I   1:33:38
+Yeah, mm-hmm.
+Mhm.
+
+Sai Vootla   1:33:57
+And then then the next steps would be the stage from stage. I only pick up the last five days, seven days data to process my the next steps for reporting or analytics. My stage is where I would call my silver. My silver is where I have.
+
+Jerry D - D2I   1:33:57
+Yes.
+
+Sai Vootla   1:34:16
+Data in a format that is generic.
+For every source and every.
+Um.
+We call provide a client so that it data set right for every data set. That's right what I guess. So for for every data set I have a silver layer.
+
+Jerry D - D2I   1:34:29
+Yep.
+
+Surya Jonnavithula   1:34:29
+Dataset week.
+
+Jerry D - D2I   1:34:31
+Yep.
+
+Sai Vootla   1:34:40
+Which is which can be used to build any pipeline. I mean reprocess at any point. Wouldn't that be faster?
+
+Jerry D - D2I   1:34:43
+Yeah.
+
+Sai Vootla   1:34:48
+To process.
+
+Jerry D - D2I   1:34:48
+We are working towards that now. You basically explained how we're handling our MIPS data, Greg, he he basically just explained how we're we're handling the common tables for MIPS. So yeah, we we have modern processes that are ultimately doing that all in a SQL environment. So we're keeping you know what what we were challenged with is for our what we call our MIPS clients, those are the ones where.
+
+Greg M.   1:34:55
+Correct.
+
+Jerry D - D2I   1:35:08
+We're we're submitting to CMS, we keep minimally manipulated. So all we're doing is we're keeping the most recent version of the data in raw tables, you know, with basic identifiers to join it back to in our data warehouse. But we're not, we're not transforming it like we're making date states, but we're not like cleaning.
+
+Sai Vootla   1:35:10
+OK.
+
+Jerry D - D2I   1:35:28
+It up or or or transforming it in any way. We keep it in that common raw state like you you outlined. So that would be the silver what you outlined. We're we're kind of doing that now.
+
+Sai Vootla   1:35:37
+Right now now next the bronze would be more like the first five steps. All we do is we now we add the formatting that we perform to get to a a different schema, a common schema that can be that is shared across different data sets.
+
+Jerry D - D2I   1:35:46
+Mhm.
+Yep.
+
+Sai Vootla   1:35:56
+Not different.
+Let's say Epic. Epic would have one.
+Bronzeleer.
+
+Jerry D - D2I   1:36:07
+Hmm.
+
+Sai Vootla   1:36:07
+For all clients.
+
+Jerry D - D2I   1:36:11
+Mhm.
+
+Sai Vootla   1:36:13
+Are we? I mean does that would you? Because if if you have that in that fashion then at any point you can build your next steps.
+Without changing the code, it's just that you could either read one year data or six months data or.
+
+Jerry D - D2I   1:36:33
+Yeah, definitely. Yeah, we're we're we're yes, we're we're kind of doing that out. Yes, exactly what you're saying. We're we're that's the next logical phase to the way we're doing it now like the smarter way of doing it.
+
+Sai Vootla   1:36:33
+Five years data.
+OK.
+
+Jerry D - D2I   1:36:48
+Basically, if we took, if I understand correctly, Greg, if we took all of our raw tables that are epic sourced and made them one, you know, that would kind of be the bronze if if I'm understanding, yeah, that that's basically it. We wouldn't have a a set of raw tables for each individual epic. They would all go to the same epic. We'd keep a certain, you know, period of time online, so we.
+
+Greg M.   1:36:58
+Yeah.
+
+Jerry D - D2I   1:37:07
+We had it and we'd be able to do ETL would just reference that and have all the right identifiers in place so we can make sure we're we're grabbing the wrong, we're grabbing the right data set for that ETL process.
+
+Greg M.   1:37:19
+Yeah, I think that's.
+
+Jerry D - D2I   1:37:21
+No, it keeps saying ETL. I'm not using that term correctly, but you know what I'm talking about.
+You sound. You don't sound convinced, my friend.
+
+Greg M.   1:37:31
+Who? Me? Me. We're starting. We're pushing the two hour mark, so I'm starting to honestly kind of fade.
+
+Jerry D - D2I   1:37:32
+Yeah, you.
+Oh, OK.
+I'm following, but this is the stuff I'm passionate about, so I can talk about this stuff for hours.
+
+Surya Jonnavithula   1:37:40
+Well.
+
+Sai Vootla   1:37:45
+Yeah.
+
+Surya Jonnavithula   1:37:46
+OK, we'll we'll talk about this maybe in a doing in a multiple steps in a day, but let's continue for today, Greg. Sorry.
+
+Sai Vootla   1:37:48
+So.
+
+Greg M.   1:37:55
+Yep, Yep. No, I I.
+
+Jerry D - D2I   1:37:55
+No, no.
+
+Sai Vootla   1:37:56
+I.
+
+Jerry D - D2I   1:37:58
+He's just an old man ignore him.
+
+Greg M.   1:38:00
+No, it's the ADD kicking in, you know.
+
+Sai Vootla   1:38:00
+So then.
+
+Jerry D - D2I   1:38:03
+Mhm.
+
+Sai Vootla   1:38:03
+Yeah, my next question would be on the stage two prod. So in stage two prod I the way I see it is would be the same for every data set.
+
+Jerry D - D2I   1:38:16
+It's yes, they should prod definitely.
+
+Sai Vootla   1:38:26
+So in this case, all we need is being able to process the data parallely so that we can just run one job that can process all this data. So you run it every once a day or every one hour.
+
+Jerry D - D2I   1:38:43
+Well, it probably one hour because we we have to feed our daily processing for reports. So you know our current model is get the data into ED operations as quickly as possible. So that's from a raw state through ETL into our data warehouse and then every half hour I look for anything new and I place that over into our business objects environment which is.
+What the operations table Greg showed that's.
+
+Sai Vootla   1:39:05
+So Sanjay, would that be for every source or would that be only for a few sources?
+
+Jerry D - D2I   1:39:09
+That's about half of what we do.
+
+Sai Vootla   1:39:12
+OK, OK.
+
+Jerry D - D2I   1:39:15
+Ultimately, every single visit gets placed into ED operations regardless. It's just kind of our central Jonathan. Jonathan, who is, you know, our our, our chief science officer, he's one of the partners of the company. He challenged us with he would like every single visit we get from any source in the ED operations.
+Format because we can do global reporting so we can, you know we we can do geographic reporting for across the entire United States. You know like we did a lot of that during COVID where we took we had every single visit from every, every hospital across you know all the from Hawaii all the way to New York like the whole 9 and we were able to do heat maps for different things.
+
+Greg M.   1:39:42
+And it.
+He can also, he can also do his shareholder reports. So since everything's aggregated in one place, he can do a business, a company wide, you know, an analysis of our company.
+
+Sai Vootla   1:39:57
+Gotcha.
+
+Jerry D - D2I   1:39:58
+Yeah.
+
+Sai Vootla   1:40:08
+So say every one hour and then say processing takes another.
+By, you know, 1520 minutes.
+
+Jerry D - D2I   1:40:16
+Yeah, we're currently doing like 1/2 hour model because our ET LS run pretty quickly. You know, even big data sets run relatively quickly. We have it optimized. So you know, and now I'm I'm sure we can deal with an hour. Like if we're gonna, if we were gonna roll everything up and say everything we got for this hour is getting processed, you know, we're gonna, we're gonna give you everything we get in an hour on the hourly basis. I think we can work with that.
+
+Sai Vootla   1:40:22
+And.
+So and and every time I load data from stage to prod, is it a merge or is it just an insert?
+
+Jerry D - D2I   1:40:43
+It's a merge.
+
+Sai Vootla   1:40:45
+Too much, OK.
+
+Jerry D - D2I   1:40:46
+Yeah.
+And that's probably over-engineered because the data doesn't change that much. I've been improving on that process to only really, you know, to make it more of a a a realistic, a smarter merge, you know, instead of just overwriting everything every time we get it because it was causing problems. So we're doing more of an analysis in there where we say, OK, compare.
+
+Sai Vootla   1:41:00
+They.
+
+Jerry D - D2I   1:41:06
+Compare what we got in stage versus what we have in prod and make a decision as to whether overwrite or not.
+But yes, it is it. It's a SQL merge to do that right now.
+And that's in support of the data changing over time. Like if I got data today and the patient hadn't been discharged yet, he got discharged later in the day. When I get the data tomorrow, I will now have a discharge disposition. So that will then get updated. So I can say I didn't have it yesterday, but then you know tomorrow I'll get that data in raw and I'll be able to update the data warehouse with the correct information.
+
+Sai Vootla   1:41:22
+OK.
+
+Jerry D - D2I   1:41:41
+And then it'll, you know, downstream processes will get updated accordingly.
+
+Surya Jonnavithula   1:41:48
+Sorry, I just on that around that area about the half an hour every hour update. So Jerry, the most the frequent daily refresh, right? That's the lowest granularity you have from the clients, right? Not.
+
+Jerry D - D2I   1:42:06
+Mhm.
+
+Surya Jonnavithula   1:42:07
+Not hourly, right?
+
+Jerry D - D2I   1:42:09
+OK.
+
+Surya Jonnavithula   1:42:10
+It's a daily refresh or some people may be weekly and monthly.
+
+Jerry D - D2I   1:42:12
+We are, we are doing daily refreshes for reports, yes and and and any cycles daily.
+
+Surya Jonnavithula   1:42:20
+Talking about data refresh from your clients is coming every day. You're getting some every day, right? OK, so let's talk about one data set at this point in time. One data set, let's say, came this.
+
+Jerry D - D2I   1:42:24
+Every day, yeah, it's we don't, we don't have any real time feeds. It's it's definitely a daily extract model.
+Mhm.
+
+Surya Jonnavithula   1:42:36
+That is scheduled at a 7:00 AM or a 7:00 PM or a something, let's say one time, right? Today it came in, right? And it will go through all your pipelines of raw stage and then to production, right? Why would I need to do every hour on the same data set to the production?
+
+Jerry D - D2I   1:42:41
+Yeah.
+Mhm.
+No, we we the reason we do it is because we get data as the day goes on. Like we we don't, everybody doesn't send us data at 7:00 AM, like we'll get data at 7:00 AM. And yeah, that's why we're doing it that way.
+
+Surya Jonnavithula   1:42:55
+You don't need to, right?
+No, I understand. I understand when I'm when I'm saying that particular data set is updated once to the production every day once. But but you I understand that you have lot of data sets coming from many hospital systems, they're all staggered in time. So that's why you have to.
+
+Jerry D - D2I   1:43:17
+Mhm.
+
+Surya Jonnavithula   1:43:22
+Do this one hours thing right? OK, I I just wanted to. I understood, but I wanted to make sure.
+
+Jerry D - D2I   1:43:24
+Yeah.
+So the no, no, no, I did just to to to give a little more detail. So we are, we are on a daily footing, we'll get data daily. We load that to you know the data warehouse like that's the whole raw, you know the raw import the the.
+
+Sai Vootla   1:43:28
+Oh, OK, so.
+
+Jerry D - D2I   1:43:42
+The stage processing, the stage to prod that goes to the data warehouse. I have a process that every half hour looks and says, OK, do we have, you know, what visits did we get? Copy, you know, insert them new into the ED operations table, right that that's our that's our half hour process.
+
+Surya Jonnavithula   1:43:56
+Yeah, got it.
+Duck.
+
+Jerry D - D2I   1:43:59
+At night, I'll go and I'll, I'll do more of a deep dive where I'll say, OK, give me everything received in the last, you know, 24 hours or you know, multiple days depending because things change over time. That's when I do a full merge update where I'll say, OK, make sure you're filling in the blank. I'll look for.
+
+Surya Jonnavithula   1:44:04
+Thank.
+
+Jerry D - D2I   1:44:15
+I'll try to complete the record in ED OPS as as a daily process. So I'll go and say OK, you know that visit that I said where I I didn't have a disposition today or I didn't have a disposition yesterday, but I got it today. You know tonight I will update the ED operations table with the missing data because I'm doing a merge update on the daily for that.
+
+Sai Vootla   1:44:36
+So basically, so basically, basically I get the data from different clients throughout the day once.
+
+Surya Jonnavithula   1:44:36
+OK, yeah.
+
+Jerry D - D2I   1:44:36
+Does that make sense?
+Yep, yeah, I'll do a roll up where I do a full update to the production tables and ED OPS with all the information. You know that also includes like all the the the half hour cycle is built. So we just get the patient record in that one table so they can use it for reporting.
+We we have, we have cycles later in the day to do more complete data like we we also copy over orders, medications and prescriptions and there's also some charting elements we copy over in vitals. So instead of the overhead on that SQL server was so much that we couldn't do that every half hour because it was just too much like it was just taking too long. So we broke it down and say OK, all I really need.
+
+Surya Jonnavithula   1:45:00
+Yeah, got it.
+
+Jerry D - D2I   1:45:19
+Is the visit set up in that environment? So we do that every half hour throughout the day. At night I have a more of a maintenance cycle that says OK, now I want to load all the data. You know I want to update so I have the most complete record in ED OPS and I want to load any missing data from the last few days. That's a heavy update because it's an old SQL instance that takes about a bunch of time.
+Time. So every evening I'll run a process that catches everything up.
+
+Sai Vootla   1:45:41
+Right.
+
+Jerry D - D2I   1:45:43
+OK.
+
+Sai Vootla   1:45:44
+But probably I'm just thinking like you know, instead of being schedule based, if it's more like event based, I say OK, I I find new data, I process it. I'll bet that would be an ideal. I'm just thinking.
+
+Jerry D - D2I   1:45:50
+Mhm.
+Yeah.
+No, the reason it was designed on, it was designed quickly because we went from a monthly footing to a daily footing in a very short period of time and we kind of had to make it work. So that's why we designed it the way we did.
+
+Sai Vootla   1:46:04
+But did.
+But this is this is how I would would have designed if I were on SQL Server.
+
+Jerry D - D2I   1:46:13
+Yeah, it's we're very limited. It stinks. It really does.
+
+Sai Vootla   1:46:16
+Yes.
+Yeah, I mean, it served the purpose.
+
+Jerry D - D2I   1:46:20
+And I have a very old SQL Server. Like the problem is we're also using a very old instance of SQL in my business object environment and I I'm I'm having a lot of trouble getting getting them to update because it's just going to, it's going to be a major project for them. So they're being reluctant. So I I have older versions of SQL that I'm supporting as well.
+And it's, you know, it's there's a lot of a lot of challenges. I'll just leave it at that.
+
+Sai Vootla   1:46:42
+So actually with that question, I think I have a question there with business objects. Now business objects is now all the reports of business objects are reading from a SQL Server Microsoft SQL Server database.
+
+Jerry D - D2I   1:46:57
+Yes.
+
+Sai Vootla   1:46:59
+Now how how? What are the challenges if you have to use a different uh?
+Datastore.
+
+Jerry D - D2I   1:47:07
+I We'd have to get our business objects people involved in that conversation.
+
+Sai Vootla   1:47:12
+Involve OK and I have one more question there on say now the business objects leads from database right?
+
+Jerry D - D2I   1:47:22
+Mhm.
+
+Sai Vootla   1:47:23
+Is it like they would business objects run real time queries or would that be like an extract? Just extract the data and then store it in business objects?
+
+Jerry D - D2I   1:47:31
+It's it's kind of a hybrid. You know, we have certain reports that are, you know, collected in store. We have others that are doing real-time queries against the SQL database.
+Daily like not, you know, real times a poor terminology. So basically they have a trigger, they have an event-driven process where you know it used to be scheduled where they would just run the reports at 10:00 AM every day. Now they're more event-driven where they're they're looking to make sure the data is there. We have like a trigger file that we create and that is that you know once it passes QS.
+One of the final things we do is we create a a trigger file for business objects to pick up business objects monitors looking for that trigger file and then it kicks off its report collection. So usually it's you know, summary level tables over there so it doesn't have to do like real time crunching, but it's definitely event driven.
+
+Greg M.   1:48:17
+It's it.
+
+Sai Vootla   1:48:22
+No, I mean I mean.
+
+Greg M.   1:48:22
+It's the report refreshes. Some reports will refresh on open, in which case they will fire a SQL statement. Other ones it's a a timed refresh or a timed and trigger file refresh that will happen once a day or manually. We also have our entire business objects team.
+
+Jerry D - D2I   1:48:24
+Yeah.
+
+Greg M.   1:48:41
+In there who are working on reports and they'll refresh the reports often and.
+You don't want to see the sequel that that that thing generates.
+
+Sai Vootla   1:48:55
+Right, but why am I asking that question? It was so now are these? My question was more more around does business objects when end user are they'll interact with the report business objects report.
+Every click would it would run out of a refresh data within business objects or would it go have a live connection to a SQL Server where every click is performing a a database call?
+
+Jerry D - D2I   1:49:22
+I don't believe they allow that, yeah.
+
+Greg M.   1:49:23
+The first only there's only one set of reports. That's the summary KPIS reports that will refresh on open and on click. And that was a whole separate process. So this is also why everything that Business Objects runs off of.
+Runs off of that other 27 SQL Server. It does not query the 40 directly. So it our our quote UN quote data warehouse and the the the all the databases that we've been talking about, all the data tables that we've been talking about sit on our 40.
+Production server. Then there's the 27 business object server. We feed all the data into that 27 business object server so that business objects is querying that sequel and not the production 40.
+
+Surya Jonnavithula   1:50:15
+So can I interrupt? Can I interrupt for a minute? Sorry, let me interrupt because.
+
+Jerry D - D2I   1:50:15
+But they're not doing real time refreshes, yeah.
+
+Sai Vootla   1:50:16
+Bro.
+Yeah.
+
+Surya Jonnavithula   1:50:22
+This the the data that you are feeding to the 27 of thing where the BO is actually pulling it from, that is your analytics for the analytics, right? That is a legacy business. That's where you started right now.
+
+Greg M.   1:50:32
+Correct.
+
+Jerry D - D2I   1:50:33
+Yes.
+
+Greg M.   1:50:36
+Correct.
+
+Jerry D - D2I   1:50:36
+Yes.
+
+Surya Jonnavithula   1:50:40
+Just to make sure that when we try to do this, that we, let's say the future state comes, we still feed into the 27 and then business objects can take it from the 27, right? So, so we don't need to worry about.
+
+Jerry D - D2I   1:50:51
+Yes, that's the plan. We're not going to change that.
+
+Greg M.   1:50:52
+Correct, Yeah.
+
+Surya Jonnavithula   1:50:55
+That instance at all at this point in time, that's what I'm thinking, correct?
+
+Jerry D - D2I   1:50:57
+No, no, that's not part of this. Yeah, as long as we can feed a sequel, as long as we can feed a sequel.
+
+Greg M.   1:51:00
+Nope. So long as Yep.
+
+Surya Jonnavithula   1:51:01
+Yeah, feed. Yeah, we need to feed the SQL side there. We don't need to worry about between Vivo and then 27 that continues the same way.
+
+Jerry D - D2I   1:51:05
+Yes.
+
+Greg M.   1:51:05
+Yep.
+
+Sai Vootla   1:51:06
+But.
+
+Greg M.   1:51:09
+And and now you see why I consider them a customer of ours, just like any other customer, we just output to them, you know that that's.
+
+Surya Jonnavithula   1:51:14
+Yeah, yeah, yeah. I got it. I got it. Yeah. Yeah. Yeah.
+
+Jerry D - D2I   1:51:15
+Yeah, he's just make it, yeah.
+
+Sai Vootla   1:51:18
+Right why I was asking this? I I have different reason why I was asking this question was because why do I need to even provide them in SQL right? Because I can output that to an S3 folder path.
+
+Jerry D - D2I   1:51:19
+This is all language I developed over years.
+
+Greg M.   1:51:34
+Yeah.
+
+Sai Vootla   1:51:34
+And business updates could just refresh out of that folder every time, whenever you know they want to.
+
+Greg M.   1:51:40
+Unfortunately, we do not have a very strong business objects administrator, so we're we're relying. Yeah, it's it's definitely a conversation we can have, but our business objects.
+
+Jerry D - D2I   1:51:46
+But it's a conversation we can have, yeah.
+
+Greg M.   1:51:55
+Like so business objects, I don't know if you know SAP business objects. You have to build a universe in which you kind of preset up all of the table joins and whether they're inner and outer and you kind of set up all the queries, all these like.
+
+Sai Vootla   1:52:22
+OK.
+Mm.
+
+Greg M.   1:52:30
+That is just as big a project as trying to do this foundation work. So we've kind of put our by priority on rebuilding this foundation and undoing the bird's nest of our ET LS and doing this first. That whole universe is kind of you can't touch it. It's it's it's.
+
+Sai Vootla   1:52:34
+Yes.
+
+Greg M.   1:52:49
+Rube Goldberg that has to do its thing. So, so long as we can continue to feed the tables the way they are, that whole universe stays in balance. Eventually, if we can prove that this is much faster, much better, we can start transitioning things downstream. But we need to do this foundation work first.
+
+Jerry D - D2I   1:52:56
+Yeah.
+
+Sai Vootla   1:52:57
+Thanks. Sure.
+
+Surya Jonnavithula   1:52:58
+Yep.
+
+Jerry D - D2I   1:52:59
+It.
+
+Sai Vootla   1:53:07
+Right, right.
+
+Jerry D - D2I   1:53:07
+As as long as we keep in mind that for for the 27 instance we have to be able to feed a sequel environment, I I think that'll keep us on point.
+
+Sai Vootla   1:53:15
+Right, right.
+
+Surya Jonnavithula   1:53:15
+Yeah, I think let's let's put it that way for the current scope and maybe we can say future desired features or scope of the work.
+
+Greg M.   1:53:15
+Yeah.
+
+Jerry D - D2I   1:53:18
+Yeah, just for now 'cause.
+Yes, I think that's a good idea.
+
+Sai Vootla   1:53:22
+Yes, because the from here because the design would be where I have data stored in gold which is completely denormalized and that can be used by any BI tool or any data analyst or data scientist.
+
+Surya Jonnavithula   1:53:26
+So.
+
+Jerry D - D2I   1:53:33
+Yep.
+
+Sai Vootla   1:53:40
+Uh, where the deal isn't.
+
+Jerry D - D2I   1:53:41
+OK. As long as as long as I can bring you to the meeting where you have to tell Jonathan that you know we can, you know, OK, I'm kidding. But ultimately I would need, I would need an expert opinion to really to to have that conversation. So when we when we get there, I would definitely want to bring you, you sound like you know what you're talking about. Greg and I have been hands.
+
+Greg M.   1:53:46
+Yeah.
+
+Sai Vootla   1:54:00
+Yeah.
+
+Jerry D - D2I   1:54:01
+in the business object environment for a reason.
+
+Sai Vootla   1:54:03
+And.
+
+Greg M.   1:54:04
+Yeah.
+
+Sai Vootla   1:54:06
+Sure, OK.
+
+Surya Jonnavithula   1:54:08
+Yeah, I think, yeah, that's true. But Sai, you but Sai, you want you started talking about the the data warehouse, right? How it is and what is, why don't you continue that?
+
+Sai Vootla   1:54:23
+Yes, I think I kind of have an idea of how the data, you know, is flowing through and how we actually segregate the data across for processing.
+
+Jerry D - D2I   1:54:35
+Yeah.
+
+Surya Jonnavithula   1:54:38
+OK, perfect. So let's do one thing, Sai. Let's go through our document, make sure that.
+
+Sai Vootla   1:54:38
+And um, I think.
+
+Surya Jonnavithula   1:54:48
+From our side, we didn't leave out any in for today what we want to call. We have one more hour, but.
+
+Sai Vootla   1:54:53
+Yeah, no, yes. I had one thing where wanted to like get a list of all my data sources, right?
+Data sources, right?
+
+Jerry D - D2I   1:55:02
+Mm-hmm.
+
+Sai Vootla   1:55:03
+Which is I think probably a distinct of that epic column I guess and not epic cause one column that just lists all the data sources and other thing was what has been now moved to AWS. Now we talked about AWS, we talked about DTS packages but.
+How much of it is actually, you know, moved and to AWS?
+
+Greg M.   1:55:26
+All right, so.
+
+Sai Vootla   1:55:26
+And what?
+
+Greg M.   1:55:30
+Because I've been afraid of all this structured data and and the the the ETL processes that you all seen. What I've what we've tried to move or I've I've been trying to do in the AWS land is we've taken out a whole new data set of unstructured data, basically free text.
+Notes. And so I've been trying to do some processing and playing with that in the AWS land. Other than that, really all we're doing is those zip files that you see we put into cold storage on S3.
+
+Sai Vootla   1:56:00
+OK.
+Got you. Makes sense. And uh, OK.
+And then we have Uh C# code that reads data. It runs on a VM or a Docker um machine or or.
+
+Greg M.   1:56:14
+No, it runs on the terminal server.
+
+Sai Vootla   1:56:16
+On on the internal server.
+
+Greg M.   1:56:20
+Yeah.
+
+Sai Vootla   1:56:29
+OK.
+And then we say we talked about data analysis requirements. How do I mean what kind of data analysis typically you would receive from?
+I don't know if they're like internal users or internal, you know, employees or that'd be coming from end flight.
+They apart from the canned scorecards and reports that we built out of business objects.
+
+Greg M.   1:57:01
+Sure.
+Then we're just building extracts, different extracts.
+
+Sai Vootla   1:57:10
+Extracts OK.
+
+Greg M.   1:57:13
+Either go out to to you know CSV, you know CSV outputs or I just recently built an API so.
+
+Sai Vootla   1:57:13
+And.
+
+Greg M.   1:57:27
+I'm I'm I'm exporting data via an API call. You know this is for the research and for the.
+Clients to do other analytics. We do have a a another group of of clients who we are, we are feeding a whole RDS environment so that they can do their own analytics on the data.
+
+Sai Vootla   1:57:52
+OK.
+So, so for that, so when a request like that comes, we basically run through SQL, write a new SQL in a stored procedure or.
+
+Greg M.   1:58:04
+Python. A lot of it's the I've I've become a big proponent of transitioning to Python, so I do it all in memory.
+
+Sai Vootla   1:58:11
+And then we OK.
+And and when you see running, where do you run this Python code? Like on a your local machine or on a VM?
+
+Greg M.   1:58:19
+A lot of the Python is still is also run on that that terminal server box. Recently we've spooled up a Linux box, you know a headless Linux and I've been building stuff and and right now we're in cron jobs there my my.
+
+Shashank Saran   1:58:27
+It.
+
+Jerry D - D2I   1:58:29
+Mhm.
+
+Greg M.   1:58:37
+My ultimate goal was to use Airflow. We have an AW, we have a managed Airflow instance. So my goal was to use the Airflow like it was the task scheduler in term terminal server and then use Airflow to start triggering Python scripts that.
+Live in the Linux box or simple ones that that are in the airflow itself. You know, trying to utilize more of the cloud computing than this this one poor terminal server box that's just getting the crap kicked out of it.
+
+Sai Vootla   1:59:10
+Yeah, it's great. Is there a chance can you show me what you currently have in airflow?
+
+Shashank Saran   1:59:12
+Just.
+
+Greg M.   1:59:18
+It's all just test stuff. Yes, I can.
+
+Sai Vootla   1:59:23
+I'm just trying to understand not where where we are. Yeah, OK.
+
+Greg M.   1:59:24
+This is where this is where Shaw has been working.
+
+Shashank Saran   1:59:29
+Yeah.
+
+Jerry D - D2I   1:59:30
+Ricardo also has been.
+
+Greg M.   1:59:30
+You don't have airflow upshot, do you?
+
+Shashank Saran   1:59:33
+Uh, let me see if I can get it up. Uh.
+
+Greg M.   1:59:34
+I didn't do there, so you should be able to.
+
+Jerry D - D2I   1:59:39
+This is where Ricardo's been helping us. He's been very quiet, but ultimately Sha Ricardo's been working with Sha, Greg and Kyle on the airflow project.
+
+Shashank Saran   1:59:40
+Yeah.
+Yeah, give me a second. I'll probably knocked out the wrong.
+
+Greg M.   1:59:59
+Oh yeah, crap. I got a um.
+I go through this.
+Also causes to kind of bifurcate our AWS environments and now having a little bit of confusion figuring out how to get into different.
+This is the air, the airflow I don't.
+
+Sai Vootla   2:00:26
+Times are managed. Uh.
+
+Greg M.   2:00:44
+I can go here A/B's. Yeah, here we go. We we just have. It's not a production by any means. We have a couple of things that we've we've built. Again, this is where I was saying I was taking the free text or the the unstructured data and trying to do stuff with it. That's what these are.
+
+Sai Vootla   2:01:00
+Right.
+
+Greg M.   2:01:03
+So this is one set of of files that we get from a Henry Ford client that we're taking and pulling in it is.
+
+Sai Vootla   2:01:17
+Right, OK.
+
+Greg M.   2:01:18
+This for it's a PDF file, so we're taking a PDF file in. I'm writing it to the the ES3 and trying to pull some metadata out of it. And so this is just where kind of we started and.
+
+Sai Vootla   2:01:19
+Mhm.
+
+Greg M.   2:01:32
+Um.
+Out on the same thing.
+
+Sai Vootla   2:01:37
+Just trying to read the zip files and then just dump it into OS3.
+
+Greg M.   2:01:40
+Yeah, so we're opening up these huge zip files of of this one is.
+
+Sai Vootla   2:01:42
+Um.
+
+Greg M.   2:01:46
+dot DAT so there um.
+They're like an XML and then I've gotta go through and and figure out.
+
+Sai Vootla   2:01:54
+But.
+
+Greg M.   2:01:57
+What format they're in and and I pull out metadata and trying to build a kind of a metadata layer for. This is kind of where I I think maybe bit off a a bigger.
+Chunk of the tiger than we should have.
+Oh, I'll shut up. Shock and Sean. This is Sean and Ricardo's show.
+
+Shashank Saran   2:02:26
+Yeah.
+The airflow bit of it.
+Or the OR the AWS cloud. Sorry, you just I was working on something that's in between.
+Nothing.
+
+Greg M.   2:02:35
+I guess kind of both.
+
+Shashank Saran   2:02:37
+Edit.
+
+Sai Vootla   2:02:37
+OK.
+
+Shashank Saran   2:02:39
+Yeah, well, on I think Ricardo can help me out with this, but on the data lake side of it, let me try to.
+Bring this up.
+OK.
+We have to open side by side.
+Yeah. Um. So I think at the moment we just have a.
+One ETL that's kind of writing into that and as as Greg mentioned, just copying some files and pulling it into this lake formation catalog that we have and what it's doing is it's essentially.
+
+Sai Vootla   2:03:48
+Mhm.
+
+Shashank Saran   2:03:52
+Ricardo helped us build out a a medallion architecture for the same. So we have like a bronze, gold and silver kind of thing. I think it's better to see the see it in the S3 bucket.
+Yeah, so at the moment we have a a bronze layer and while the silver layer which are getting populated here we have like 2 two of our like simpler applications which just just kind of read and extract.
+Kind of system that's going on here and as you can see the raw files which he was talking about, that's sorted by ingestion date and just kind of picking up those every day and essentially storing that in the raw and then the extract is just unzipping those.
+Oops, I got and the let's go back there. Yeah, and the extracted is just kind of unzipping those.
+And storing those as well. So the dates are included because we have like I think a metadata catalog which is also tracking what's being put into that bucket. At the moment we I think we have just one one column in that.
+Lake formation.
+
+Sai Vootla   2:05:15
+To extract this, you you have some notebooks that you're using to.
+
+Shashank Saran   2:05:20
+Yeah, so these are all running in the Airflow script that we had showed essentially. Yeah, exactly. So at the moment everything we're running off of the runners that execute that execute the code on the Airflow side of it.
+
+Sai Vootla   2:05:25
+Oh, OK. I broke. OK.
+
+Shashank Saran   2:05:37
+So yeah, like you can see the code here, it does connections to all the buckets that we need and kind of writes it out. And yeah, and essentially we are using like a virtual environment operator that does the dependency management for that.
+
+Sai Vootla   2:05:37
+OK.
+
+Shashank Saran   2:05:53
+So it basically spins up a new new container every time it needs to run any of those tasks, which at the moment is not ideal, but oh, it's what works on the Airflow side of it. Because I think the other option is to have another Airflow environment. I mean you need to create different Airflow environments within the Amazon.
+
+Sai Vootla   2:06:06
+Right.
+
+Shashank Saran   2:06:13
+To have like well different dependencies and that's just kind of expensive to do and even though apparently I think in clouds can explain this better, but I think essentially doing those changes.
+To the requirements file within that airflow environment is kind of difficult. So at the moment we're just kind of doing like a well work around where we just use this virtual environment generator and creates a virtual environment when we when we need to run anything.
+
+Sai Vootla   2:06:40
+Yeah.
+
+Shashank Saran   2:06:44
+So yeah, at the moment it's not adding too much of an overhead. But yeah, I think as we get it gets more complicated and we have a lot of pipelines running it will. But yeah, for now I don't think it affects it too much. So those are all written here and these are all linked to a GitHub repository we have.
+So that's why we're kind of like doing a code management base base of it. For this particular one, we're using this repository and it has a GitHub actions workflow that basically contributes everything which which copies over all these files to the.
+The Amazon S3 managed bucket and we're kind of working off that to update our code and get it all pushed into the environment. And like I mentioned at the moment, I think we have just one environment, so we don't really have a testing environment though. It's it's all just one production environment.
+
+Sai Vootla   2:07:41
+Yeah.
+
+Shashank Saran   2:07:42
+But at the moment, we don't really have that many production pipelines anyway. So it's kind of a mess because you can see a lot of testing, test pipelines and things like that.
+Yeah, sorry to get back to this.
+We we essentially have a a partitioning. Well they we do a little bit of partitioning on the date time stamps themselves so that for you know for quicker access. I think these things have been recently set up so we've not really explored it fully.
+But yeah, as you can see, we have a bunch of tables writing in the partitions for that. We just pick up Intermountain draw.
+At the moment we just have one metadata column, but the goal is to kind of get multiple of them and then have partitions on the ingestion date of the client. Anything to speed up like the speed of retrieval. And I think the plan was to use Athena to kind of do that to have like the.
+
+Sai Vootla   2:08:37
+Right.
+
+Shashank Saran   2:08:46
+Faster retrieval and essentially what we want is this to be the data store at the end which most people use. So to get it to that point needs to be cleaned up and on top of that we would we want to get as much metadata as we can for all the pipeline flows that we have.
+At present another workflow I'm using is just to have it in a Postgres DB kind of keeping track of all that. Well RDS managed instance, RDS Postgres on this and I think that but at the moment there's just one pipeline using it, so it's not really.
+Functional, fully functional database. This is something we've been testing out.
+Yeah, this is this is the one, but uh.
+I don't have my things open. Everything's like closed up.
+But yeah, that's kind of what we're doing. And then we, you could see that medallion architecture there when we were working on the S3 bit of it where we have like the bronze, silver and gold in place. So we want to kind of utilize this for at least the unstructured data and files that we're getting in.
+And not the and we'll use something like a data warehouse solution for for the most structured SQL stuff that Greg and Jerry were mentioning before.
+Yeah, that's kind of an overview of where we are at with the lake on this side of it.
+
+Sai Vootla   2:10:17
+Thank you, Sir.
+
+Shashank Saran   2:10:18
+Yeah, they got to feel free to mention if I missed out anything. Uh.
+
+Ricardo Mendoza   2:10:22
+Yeah, I can a little bit more. Well, essentially which Shankar was stealing. Let me just share my screen.
+And see if I can.
+Oh.
+Yeah, please confirm into if you see it, if you're able to see it.
+
+Sai Vootla   2:10:46
+Yeah, like.
+
+Ricardo Mendoza   2:10:48
+OK, well yeah, the idea was to start degrading some ETLs or some notes from these all eight providers. We started with this example with the Intermountain.
+I have a simple diagram here where the idea was to follow the Metallion architecture of a lake house and of course the idea is to have the SFTP server as a source, but at this moment we are not extracting data from there.
+
+Shashank Saran   2:11:14
+So.
+
+Ricardo Mendoza   2:11:24
+Since there is a problem connecting from Airflow to the SFTP server, but we are I feel like we are extracting this from the terminal server just to like mimic the SFTP server. The idea was to of course have like the three stages.
+Or major layers of the data lake. Each of these stages are represented by buckets, by S3 buckets and so yeah, in this case the inter maintain.
+Process or well the the nature of this data is that it arrives in zip files. That is that is like the most raw state of the data. Then these zip files are extracted and we obtain Jason files from from the zip file.
+And then this Jason data is structure in a columnar like a table, let's say, and it's storing a market file in the table from the idea that from this stage.
+This stage or yeah from this like silver layer best to use Athena so data can be like read using Athena and the next step is still in silver layer.
+Was to enrich this data with the demographics data. At this like point we don't have the demographics data in the data lake, so the idea was to pull that from from the SQL Server.
+And then finally to consolidate those nodes into a gold table. An idea was to let me just like share how these like tables are reflected here in Lake Formation.
+We have the three databases, each of them for each of the layers of the data, like from bronze, gold and silver and.
+If I check the tables, this one is like the first very first layer of the bronze.
+So yeah, just just tell us about the schema here is just ingestion date because they are like zip files. So we don't we are not able to see the content of the file, so we only have the ingestion date.
+Which allow us to just to keep track of what data was ingested and this in in the history it is reflected as this. So there is a folder or a partition.
+Using the ingestion date to keep track of the of the version of the files and then.
+In order to have this layer of the extracted JSONS, there is another table.
+Which is distracted one where we also don't have like a clear schema because there are Jasons. We have like the partitions here or just.
+Here and this like this partition. This date is tied to the partition of the raw ones, so you keep track of that, for example if you have.
+If you need to see a register, you can like trace back from which extraction partition it belongs and also from which raw extraction it belongs.
+And then.
+So yeah, we are at this stage, this step of the of the pipeline. The idea is to have indication moving to a into a tabular format to start it as a parquet file here in the silver layer, so.
+From this stage use Athena to also enrich this data with the demographic data and also finally consolidate the nodes having like a final table that is ready to be consumed.
+Or or to be like exported into another like system. So this is like pretty much what we have been doing with the data lake.
+So yeah, I don't know if there's some questions related to this.
+
+Sai Vootla   2:16:43
+Yeah.
+Thank you.
+
+Surya Jonnavithula   2:17:01
+Say.
+
+Sai Vootla   2:17:01
+I don't have any questions right now I guess.
+
+Greg M.   2:17:04
+Yeah. So again, it's a little disparate because it's completely different data set than what we've been talking about for the previous two hours.
+
+Sai Vootla   2:17:14
+Yeah.
+So now how important is metadata or having these catalogs right for ingestion, raw and stage?
+
+Greg M.   2:17:26
+So.
+Again the the pathway in which we get it is still the same. So we get a lot of duplicate data day over day over day. So when I began cataloging it was it was so that I could keep track of.
+What is new? What is not? Um.
+That's where I was coming up with a an immutable hash and immutable hash. So that you know, here's the metadata that cannot change that defines what this note is and that would be my immutable hash. And then all the other stuff I would hash into the mutable and then I can compare if the immutable.
+Is the same and the mutable is different then it's an update and update the data set. And if they were both the same then I know it's completely duplicate data and throw it out. And if my mutable was the same and my immutable was different then I've got a big freaking problem.
+
+Sai Vootla   2:18:34
+Yeah.
+
+Greg M.   2:18:36
+So that that that's where I was kind of going with that cause the the the unstructured data is because it's unstructured. How do you know?
+What you don't know. I was just trying to catalog and keep track of everything.
+
+Sai Vootla   2:18:47
+Yeah.
+
+Greg M.   2:18:53
+In in addition, the the the that unstructured data is gonna have to go through pretty intensive ETL processing. So I need to know what's been processed already, what hasn't been just to save on on.
+Oh.
+Reinventing the wheel every time.
+
+Sai Vootla   2:19:16
+Makes sense, just just trying to understand you know how the structured data would be processed and how.
+
+Greg M.   2:19:24
+Yeah, that's why for now I wasn't worrying about processing it. I was just worrying about storing it, organizing it, and cataloging it. So I know where everything is and then I can build the the processing steps are easy once you know where everything is and you can just, you know.
+
+Sai Vootla   2:19:25
+OK.
+Outline it.
+Yep.
+
+Shashank Saran   2:19:41
+Yeah. Also having that trace will kind of help us monitor, oh, by the issues with pipelines and things like that. So that's another reason why that cataloging is kind of important.
+
+Sai Vootla   2:19:56
+Do do we have Cloudwatch? Do you guys using Cloudwatch in any way here? AWS Cloudwatch?
+Currently.
+
+Greg M.   2:20:07
+We do, but it's kind of like just a.
+Monitoring and alarms thing.
+
+Sai Vootla   2:20:15
+OK, much.
+
+Greg M.   2:20:18
+And it's doing better now. For a while it was missing a lot. Like I don't know if it was just not set up properly. Like the terminal server would be pegged at 99% CPU and dying and we would never get any alerts.
+
+Sai Vootla   2:20:19
+OK.
+
+Jerry D - D2I   2:20:33
+Yeah, for our help desk side of our AWS environment, we utilize Cloudwatch pretty heavily. As Greg said, they recently updated it. So we were capturing, we had some issues where things weren't getting captured, but it's been fixed. But as far as interaction with the airflow environment.
+Not that I'm aware of. And Ricardo, maybe you can correct me if I'm wrong or, you know, Shar or Greg, but I don't know that we're using Cloudwatch currently in the development phase of this.
+
+Greg M.   2:20:58
+No, that's one thing that that we're kind of lacking with the airflow is that it's it's connectivity. So it doesn't have.
+
+Sai Vootla   2:21:06
+Like.
+
+Greg M.   2:21:07
+It's starting. We're starting to get the the connectivity back in, but like I wanted it so that I could just write a Python script that would call a sub process and fire off something on the Linux box.
+
+Sai Vootla   2:21:11
+OK.
+
+Greg M.   2:21:19
+So I have I have the the that entire output for the cedar that like runs for 8 hours and it it pulls all the data, packages it and sends it to the cedar repository that runs on the Linux box. Well I just want to trigger that from the airflow to say run that thing on the.
+The Linux box, but there's like you need. You need a.
+What's it called a?
+
+Sai Vootla   2:21:51
+Use a Amazon SNS actually.
+Open notification service.
+
+Greg M.   2:21:57
+The connections, the connectors. So currently our our our managed airflow instance is behind a firewall, has no access to the outside world, so you can't download the connector to install SSH.
+
+Sai Vootla   2:21:58
+Connectors, yeah.
+
+Greg M.   2:22:14
+I need an SSH connector essentially is what I need in here. I can't get.
+
+Sai Vootla   2:22:14
+Oh.
+
+Greg M.   2:22:21
+Is Gmail connector, but I don't think it works, so I can't send notifications out of airflow. Like when these when these dags complete or if they air out, I have no way of notifying outside of airflow, so we're still working on that stuff.
+
+Sai Vootla   2:22:38
+OK, gotcha.
+That would be my next question on on, you know, monitoring and.
+Notifications for this whole data flow.
+Do you have any kind of current notification system or do you have any requirements for such today?
+Something fails or something successful.
+
+Greg M.   2:23:11
+I I I would my my plan would be that this would yes that that we could use the dynamic nature. That was one of the other pain points that we've had with the terminal servers that the only thing we have is the task scheduler.
+Which is like.
+Windows 95 technology. It's so annoying you can't do anything dynamic with task scheduler. It just it's it's.
+
+Sai Vootla   2:23:34
+Which?
+
+Greg M.   2:23:39
+So you know, this is a program, you know, a Python programmable task scheduler. So I was hoping that we could do a lot of of, you know.
+Dynamic on success, on failure, on failure of this step, do this, you know, start working all that stuff in there, but haven't gotten there.
+
+Jerry D - D2I   2:23:59
+We have other monitoring tools and and alerts and whatnot that we've built, you know, ourselves. We're not utilizing like a a a known package or software application. That's one of the things we we do want to have as Greg mentioned.
+
+Sai Vootla   2:24:09
+Right.
+
+Greg M.   2:24:10
+Yeah, so we all get e-mail spam essentially is what it is.
+
+Sai Vootla   2:24:10
+Right.
+
+Jerry D - D2I   2:24:14
+We we have integration with our Google chat, so we we have like a missing notifications group that overall part of. So you know part of the existing automation will trigger an alert when we're things are missing based on time like we expected files by 10:00 AM. So you know we didn't get you know that that triggers periodically throughout the day. We use that as an alert mechanism. We have a number of e-mail.
+
+Sai Vootla   2:24:14
+Uh.
+
+Jerry D - D2I   2:24:34
+Notifications that are built into the automated process that sends out emails for a pass or fail. You know, we have a whole bunch of things that we're doing 7 different ways, but there's got to be a better, a more unified process that we can utilize.
+
+Sai Vootla   2:24:45
+Yes, so Jerry, I don't know today or you know tomorrow first thing I'd like to you know if you can walk through your existing alerting notification mechanism very specific to the you know, the data flows, the structure data flow.
+
+Jerry D - D2I   2:24:59
+OK, I might bring, I have to bring in. We can pull in Kyle for that. I think would probably be a good person to we have it in seven. Let me think about that, but I I let me think that one through.
+
+Greg M.   2:25:11
+Again, it's each problem that we had came up with its own independent solution along with its own pretty much independent notification.
+
+Sai Vootla   2:25:17
+Right.
+Right. Yeah, I I understand. I mean, so I just want to have an idea of, you know, what's existing. So, you know, and see some, yeah.
+
+Jerry D - D2I   2:25:24
+It's almost clear.
+Yeah. So we can replicate what we're doing because, yeah, so we understand what's going on. I completely understand.
+
+Greg M.   2:25:29
+Yeah.
+
+Sai Vootla   2:25:34
+Yeah.
+
+Jerry D - D2I   2:25:39
+Yeah.
+Do you want me to bring a resource to?
+
+Greg M.   2:25:41
+Think what we can just we can add him to one of the notification groups.
+
+Jerry D - D2I   2:25:46
+Oh God, we have Google Groups as well. What the best way would to bring the resource to our afternoon meeting tomorrow morning? Or do you want to schedule something outside of that?
+
+Sai Vootla   2:25:54
+Either way, Jerry, I'm good, but you know if you can limit for tomorrow's afternoon meeting.
+
+Jerry D - D2I   2:26:01
+Yeah, I can definitely. I can bring Kyle. It would be a good place to start with that. Kyle handles a lot of that, so I'll bring him along and he can answer questions. I'll make sure he's invited.
+I'll do that right now.
+
+Sai Vootla   2:26:13
+OK. And one more question on on AWS, on do we have like a like a network architecture or you know on how data flow, what's allowed, what's not allowed? Do we have a firewall, how do we connect from within?
+Let's say T2I your network to AWS. What are the limitations? No.
+
+Jerry D - D2I   2:26:37
+Um, I have some stuff that I can share. What was that, Greg?
+
+Greg M.   2:26:37
+I think, yeah, do we have a meeting with Ryan? He's the one that that can talk to that.
+
+Jerry D - D2I   2:26:44
+Ryan Ryan's attending on Friday. I I believe he was invited, but I do have some initial like we I can definitely give you some. I can give you what I found in my investigations throughout the day. Sorry, I'm having trouble talking this time of day.
+
+Sai Vootla   2:26:45
+I.
+Unfriendly, yeah.
+
+Surya Jonnavithula   2:26:49
+OK.
+
+Jerry D - D2I   2:27:01
+I'll I'll, I'll follow up with an e-mail with to attach the the network diagrams that I have available. We are in transition for a few things, so they're they're they're a little on the older side, but they give you the general idea of what our current architecture looks like.
+
+Sai Vootla   2:27:14
+Yeah, that'd be helpful when I'm meeting you on Friday. Uh, so if I have any questions, I can.
+
+Jerry D - D2I   2:27:17
+Yep.
+Yeah, no problem. Yeah, I did some homework before the earlier today and I I dug up some some of the documentation I've received over the last period of time and I'll share that with you.
+
+Sai Vootla   2:27:31
+Thank you, Joe.
+
+Jerry D - D2I   2:27:32
+No problem.
+
+Sai Vootla   2:27:35
+Um, I think that's all I had today, Surya.
+
+Surya Jonnavithula   2:27:35
+Anything else say?
+So why not we go through your document, make sure we covered everything?
+
+Sai Vootla   2:27:44
+OK.
+
+Surya Jonnavithula   2:27:46
+OK, let's do that. And then I after that I have few questions to Jerry and Greg and then we will reflect high level what we understood and then in detail tomorrow. So I think.
+I think yes for this agreed site.
+
+Sai Vootla   2:28:08
+Yes, Sir.
+
+Surya Jonnavithula   2:28:11
+We got this understand current DTS based detail architecture D2I.
+
+Sai Vootla   2:28:19
+Yeah.
+
+Surya Jonnavithula   2:28:24
+Okay, I'll go ahead and say yes, unless you tell me it's not understand existing.
+
+Jerry D - D2I   2:28:28
+Uh.
+
+Sai Vootla   2:28:28
+Yes, I, I, I said. Yeah, yeah.
+
+Surya Jonnavithula   2:28:31
+OK, I like so.
+
+Sai Vootla   2:28:33
+Based on if I have any questions until tomorrow morning, I'll, you know, put down one.
+
+Surya Jonnavithula   2:28:37
+Of course, of course for today, if you're if you're satisfied, I think so Jerry, Greg and everyone, what we're going to do is we'll go through the recording and we have our notes and we will reflect back tomorrow what we understood and there may be questions.
+
+Sai Vootla   2:28:40
+Yeah.
+What?
+Hey.
+
+Surya Jonnavithula   2:28:56
+OK, we can start the session tomorrow like that and sync up and then move to the second session.
+OK.
+
+Greg M.   2:29:04
+That sounds good. I I anticipate and expect there to be questions because like Jerry said, we we're we're Jersey Italian boys, so we can talk and talk and talk and we'll talk a full circle and not even remember what we started with.
+
+Jerry D - D2I   2:29:18
+Yeah.
+
+Surya Jonnavithula   2:29:18
+You know, you know that was better than actually we have assessments done where we have to actually probe and drill to get to get hidden, hidden knowledge. So it works. It works very well. Thank you.
+
+Jerry D - D2I   2:29:30
+Good. I'm glad we we we're trying to be as helpful as possible, so it feel free to steer us if we're not going in the right direction.
+
+Sai Vootla   2:29:32
+Yeah.
+
+Surya Jonnavithula   2:29:37
+Absolutely, absolutely. So I'll go ahead and put yes here. I again, clouds, you got it right in the last session. Yeah, and data.
+
+Sai Vootla   2:29:43
+Mhm.
+
+Surya Jonnavithula   2:29:49
+Workflows pain points.
+Yes.
+
+Sai Vootla   2:29:52
+Yes, the most probably we might get more.
+
+Greg M.   2:29:55
+Just a few.
+
+Surya Jonnavithula   2:29:57
+So SFTP, if I understand the the Epic, CERN and everything they put into an SFTP server, your pull point is SFTPS, right?
+Jerry and Greg.
+
+Greg M.   2:30:14
+Um.
+Well, I don't think it's really a pain point other than we have like that's why we've we had to build that C# application that runs like like move it to to continually check it and to do stuff.
+
+Jerry D - D2I   2:30:29
+What?
+
+Greg M.   2:30:33
+Why we also have set up the A WSSFTP so that if now they're dropping it into a into an S3 bucket, we can trigger right off of that. I think, well, it's not so much. I agree with Greg. It's not a pain point so much as we're we're we're somewhat shackled by it because that's the accepted standard for healthcare institutions.
+
+Jerry D - D2I   2:30:44
+Mm.
+We we don't have any other way to get data. So we either have to give them a way to get US data which is the SFTP or you know ask them for an SFTP credential. So we're limited in that in that regard if if that makes sense. We when you're working with when you work with hospitals you're you're dealing with 10 year old technology. It's just the way it is. There's no money for technology. So we're stuck with SFTP.
+
+Greg M.   2:31:09
+Correct.
+They are very afraid of the word API.
+
+Sai Vootla   2:31:12
+It's more of a requirement.
+
+Jerry D - D2I   2:31:15
+And they and they don't want to do HL7 interfaces and you know it's just this is the easiest way to get data out of there. I understand I'm just saying there's there's there's other ways to acquire data out of their systems. But this is what the the we can readily get someone to say, Oh yeah, I can set up an SFTP for you and and it's the easiest way for us to get data out of their systems.
+
+Sai Vootla   2:31:16
+Yeah.
+
+Greg M.   2:31:19
+Well, I don't want to do.
+
+Sai Vootla   2:31:34
+Here I might just need a list of that data sources. Jerry types. Sorry, I I I actually not data set, right? Is it like Epic, CERN? What does?
+
+Jerry D - D2I   2:31:41
+What do you want that to?
+
+Surya Jonnavithula   2:31:50
+Do we call it a sample data?
+
+Jerry D - D2I   2:31:52
+Like what?
+
+Sai Vootla   2:31:52
+10.
+Not sample, just the name of the source system. I guess like FPK is a source system. Uh.
+
+Jerry D - D2I   2:32:00
+So all the different the disparate data sets that we get do we we have different documentation for that. Do do you you need them you want to be comprehensive or do you want like our big three like we get Epic, Cerner and you know Meditech those those are like our big three right now. Do you need an example of every single one cause some of them are custom depending like certain.
+
+Sai Vootla   2:32:04
+Yeah.
+Yeah.
+Right, because the format probably did not make much different from what I understand is the source can change anytime or you know this is very the schema can change. So I just need probably document on different types of sources and everything is I think it's fixed.
+
+Jerry D - D2I   2:32:20
+And EHRS are are different but.
+Yeah, like the schema.
+Yeah.
+
+Sai Vootla   2:32:39
+SFTB for now.
+See.
+Right.
+Custom.
+
+Jerry D - D2I   2:32:54
+We end up giving them, hey, these are the fields we want and they try to match our schema. We try to be consistent, but we're we're out there. We're stuck.
+
+Sai Vootla   2:32:56
+Awesome.
+
+Greg M.   2:32:59
+Yeah, we can say we do all scripts, but like almost every single instance of Allscript is kind of unique to itself.
+
+Surya Jonnavithula   2:33:09
+But.
+
+Jerry D - D2I   2:33:09
+That's one of our challenges, but I can. I can definitely. We also have documentation that explains all the various schemas and whatnot. I can share that as well. So let me make a note.
+
+Sai Vootla   2:33:18
+And one, but what's the data size? We're interested in the data like size of data.
+
+Jerry D - D2I   2:33:23
+It varies.
+It varies. I can give you ballpark like, you know, certain files are, you know, it depends. Yeah. OK, let me hold on. Let me take a couple notes.
+
+Sai Vootla   2:33:27
+Um.
+Yeah, what works. That's it.
+So, so, so, so it's like this Jerry, I just need like a ballpark of say it's the Epic, CERN, Multi tech top three, right. One year data which is like your live data, right. One year is what you always meant two years, sorry. And then if I have to like say not archive of five years what would be the.
+
+Jerry D - D2I   2:33:43
+Yeah, yeah.
+
+Sai Vootla   2:33:56
+You're gonna say the wrong.
+
+Jerry D - D2I   2:33:59
+It's gonna vary because it all depends on patient population, but I can, I can try. I I I can't get very exact with that because the the problem is the data set's somewhat fluid because sicker patients get more charting, so more things are done. So we we, you know what I mean? It's not like I'm always gonna get the same amount of data.
+
+Sai Vootla   2:34:07
+Yeah, yeah.
+Next.
+
+Jerry D - D2I   2:34:17
+And it it's gonna vary depending in in your, you know, time of year also helps like sick. We get over the winter months, we get a lot of flu patients. So your patient volume goes through the roof. So your file sizes go through the roof, you know what I mean? So it's one of those I can try.
+
+Sai Vootla   2:34:31
+Yeah, I'm I'm more like an average data size on like a daily basis and say if I have to run process one year data of data, right, one year worth of data, what would be a typical size that you would expect to process?
+
+Jerry D - D2I   2:34:42
+Mhm.
+
+Sai Vootla   2:34:46
+That kind of information, um.
+
+Jerry D - D2I   2:34:47
+We've tried in the past and it it I can't get you an exact list, but I I I can try to ballpark it as best I can do.
+
+Sai Vootla   2:34:52
+Yeah, yeah, yeah, definitely, yeah. I mean in in fact add like add more even if you give me the best would be to actually double the size that you would expect to be to process.
+
+Jerry D - D2I   2:35:04
+I don't know that I'll have that for tomorrow, but I'll do my best.
+
+Sai Vootla   2:35:08
+Because based on that, the solutioning will be based on you know what kind of tools and technologies we use based on the kind of data size that we'll be needing to process on a daily basis versus an ad hoc basis.
+
+Jerry D - D2I   2:35:26
+I understand what you need it for. It's just I'm I'm I've struggled with this in the past because I've been asked by clients what what would be the expected data size be for their purposes when we're sending them data and I can you know it it it varies. So it's just one of those things where you know one site is they're very wordy like I have I have sites that are you know.
+
+Sai Vootla   2:35:30
+Yes.
+Yeah.
+
+Jerry D - D2I   2:35:45
+Some doctors like to write novels. So when I compare that to other sites, the other site's a fraction of the size. So it's just one of those, it's one of those kind of things.
+
+Sai Vootla   2:35:52
+Oh, so probably we can just take the largest, you know, client you have and then the the the largest like last two, two years for this overall size, that's it.
+
+Jerry D - D2I   2:35:57
+Mhm.
+Uh.
+
+Surya Jonnavithula   2:36:05
+So at this point, does it help getting into a different question of access? Is it possible to give the access to Sai where he can only read only he can view and then get a feel of what is the different data sizes that he has in the repository already?
+Does it? That may be a one way right Sai you can get a feel.
+
+Sai Vootla   2:36:29
+Personally I I just need one file. I don't need to actually access data because I just need a number. I I can come up with a data size number so.
+
+Surya Jonnavithula   2:36:40
+Yeah, but but it's such a varying thing. It's difficult for them to give it. Maybe you can just tax.
+
+Jerry D - D2I   2:36:43
+That's I I I'm I'm making it sound worse than it is. I'm I'm just thinking my way through it. I let me let me get you that information because I have I have the correct client we can use based on your request.
+
+Sai Vootla   2:36:44
+Yes.
+
+Jerry D - D2I   2:36:57
+I can get it.
+
+Surya Jonnavithula   2:37:00
+OK, I think in summary what you need is one year worth of data and a daily data from A1 force, right? One hospital system.
+
+Sai Vootla   2:37:12
+Yeah, probably epic. So may take approximate sizes.
+
+Surya Jonnavithula   2:37:15
+Let's call it as one data set, one data set, right? All the unified format from multiple systems coming as one data set.
+
+Sai Vootla   2:37:19
+What?
+So yeah, our main thing is to understand how much amount of data would be processed at one given time and then say the system is down for like one day, two days, three days, seven days, right?
+
+Surya Jonnavithula   2:37:31
+Yeah, yeah, correct.
+
+Jerry D - D2I   2:37:38
+Yep. Mm-hmm.
+
+Sai Vootla   2:37:39
+I was doing all this processing seven days. So if I have to process seven days worth of data every 30 minutes, every one hour or every 30 minutes, what kind of capacity processing and compute that I would need and what kind of tools and technologies we could use?
+
+Jerry D - D2I   2:37:56
+Understood. Yeah, definitely. I I can do it. Like I said, I I I will.
+
+Surya Jonnavithula   2:37:57
+Yeah.
+
+Jerry D - D2I   2:38:05
+I have for the top three, I can break it out. Concerner is slightly different from Epic, which is slightly different from like a Meditech site or an Allscripts for example. So let me let me do it in the same vein of the top three EMRS. Like you said, I can, I can also get you the different file names, OK.
+
+Sai Vootla   2:38:12
+Sure.
+
+Jerry D - D2I   2:38:20
+I got it.
+
+Sai Vootla   2:38:21
+Anjali is there, would it be helpful? Sorry, excuse me, would be helpful to understand what tools and technologies that you would, you know are more comfortable working with like say SQL, Python, you know?
+
+Surya Jonnavithula   2:38:23
+Said, do we need?
+Yeah, right. Just on the same thing.
+
+Sai Vootla   2:38:39
+Um.
+
+Jerry D - D2I   2:38:40
+We are a SQL shop for the most part. Most of my people understand SQL. We're also becoming a Python, so I have no problems with with training on a new tool set, but ultimately what we're currently using and what our our biggest comfort level for for the team is working with SQL, working with Python.
+
+Sai Vootla   2:38:48
+OK.
+
+Jerry D - D2I   2:39:00
+I think we we're starting to you know dip into Postgres because that's becoming more and more useful. You know cause as as we mentioned SQL's a bit of a struggle at times for certain situations. So that that seems to be like our our base tool set right now. Am I missing anything guys Greg or Shah?
+
+Sai Vootla   2:39:01
+Perfect. Yeah.
+Oh.
+
+Jerry D - D2I   2:39:17
+'Cause that covers most of it, right?
+
+Surya Jonnavithula   2:39:19
+I believe so.
+
+Sai Vootla   2:39:21
+Oh yeah, I mean, not exactly whether SQL was like SQL language. OK, not necessarily Microsoft SQL.
+
+Shashank Saran   2:39:22
+Yeah, I think so.
+
+Jerry D - D2I   2:39:26
+Yeah, T SQL language is what is what we're real comfortable with, but you know we have no problems. Yeah, Postgres is is something that the team's been using. I've been dipping into it as well. You know if that's that's viable. But for the most part like there's always going to be a SQL element in everything we do like you like we mentioned with the EDBI, the back end is SQL unless we we do a a.
+
+Sai Vootla   2:39:29
+D Sigma. Perfect. Yeah, awesome.
+
+Jerry D - D2I   2:39:46
+Pretty big forklift. We're gonna have to have sequel, so that's gonna be part of it regardless.
+
+Sai Vootla   2:39:50
+Right, so it's actually query language Python. Perfect.
+
+Jerry D - D2I   2:39:51
+Mhm.
+Yep.
+I mean.
+
+Surya Jonnavithula   2:39:58
+Yeah, I was trying to ask in the before this side, do we need per source number of tables?
+Like is it fixed?
+How it is coming when you are? Do we need that information?
+
+Sai Vootla   2:40:15
+Actually because as we keep adding more clients and you know it's just going to grow anyways, so you know more scalable, you know architecture.
+
+Surya Jonnavithula   2:40:25
+I'm asking per client, are there how many tables are there? Is it?
+
+Jerry D - D2I   2:40:25
+E.
+I'm gonna provide that. It's basically a table for the raw part. It's a table per file. I can give you the stage tables like I can, I can do a quick and dirty and and give you that information.
+
+Sai Vootla   2:40:41
+So basically like a list of tables per data set right per epic CERN in meeting. Yeah, that that's.
+
+Jerry D - D2I   2:40:44
+Yeah.
+That's what I was. That's what I was gonna share.
+
+Sai Vootla   2:40:49
+OK.
+
+Surya Jonnavithula   2:40:51
+And then there, um, we talked earlier about a unstructured data. All the unstructured data is a doctor notes or anything else is.
+
+Jerry D - D2I   2:41:00
+We have the only unstructured data we're currently grabbing is the doctor note. Everything else is is structured.
+So we're getting doctor notes that are PDFs. We're getting, you know, text blobs at Epic. You know, we're we're getting Jason files out of Cerner. Like we have a number of different formats that we're getting as far as, you know, the provider notes.
+
+Surya Jonnavithula   2:41:09
+Um.
+Right, so so as part of the scope of this project, doctor notes is something we just keep it as is or do we need to do any NLP on this and then structure the data?
+
+Greg M.   2:41:43
+Phase two. Not right now. Again, this is just about organizing and.
+
+Surya Jonnavithula   2:41:44
+Yes to.
+
+Greg M.   2:41:50
+Cataloging, you know, just organizing the data that we know where it is. We we we can bring NLP in later. We have a couple of different.
+You know, open ends that we can plug that into Gator Tron being one of them and.
+
+Sai Vootla   2:42:06
+OK.
+
+Greg M.   2:42:11
+Another partner that's looking to do stuff. We got plenty of people looking to do stuff with the unstructured notes and NLP. But again, we want to have a pipeline that we we we want to have a a fitting ready to go so we can plug a pipeline into that. So having all the structure unstructured data.
+Organized so we can just plug a pipe into it and start feeding it is is the goal.
+
+Surya Jonnavithula   2:42:36
+Oh yeah, the reason I ask is we are, we also have extensive NLPAI, Gen. AI expertise. So that's why I'm saying that's perfectly the way to go phase to phase two.
+
+Greg M.   2:42:47
+Oh, and we may use that, but again, let's set the foundation.
+
+Surya Jonnavithula   2:42:52
+Yeah, exactly.
+
+Jerry D - D2I   2:42:53
+Mhm.
+Mhm.
+
+Surya Jonnavithula   2:42:58
+So, all right, so Sai, go ahead.
+
+Sai Vootla   2:43:03
+Right. Um, yeah, I just wanna know the comfort level with the two with the languages like SQL language and Python pandas. So yeah.
+
+Jerry D - D2I   2:43:13
+Yep.
+
+Surya Jonnavithula   2:43:14
+OK. Anything not?
+
+Greg M.   2:43:14
+Yeah, I I don't think Python pandas.
+
+Sai Vootla   2:43:17
+Yeah.
+
+Surya Jonnavithula   2:43:19
+Anything not covered in the highlighted?
+
+Sai Vootla   2:43:25
+Not at the moment, I think of. So yeah, probably.
+Tomorrow morning or tomorrow afternoon I might come up. All right. And any, you know, high-level diagrams, if you can share, that'll be helpful.
+
+Jerry D - D2I   2:43:40
+Yep, I'm. I was working on that as we're speaking, so I'm taking my notes so I have some homework to do.
+
+Sai Vootla   2:43:46
+Yes.
+
+Surya Jonnavithula   2:43:48
+So any specific things, documents you need it? I know in general you said documentation, but anything specific must have Sai for us.
+
+Jerry D - D2I   2:44:02
+Documentation in general has been a challenge for us. Like we'll get it done and then we'll never go back and document what the process is. So a lot of things lives in people's heads. So you know part what we've been trying to do, especially with the git repository, is force that as to become part of the process.
+
+Surya Jonnavithula   2:44:08
+I know.
+
+Jerry D - D2I   2:44:18
+So.
+You know it once we start establishing ETL tools and and what the flow is going to be and you know where the various things are like you know making sure that we're documenting along the way so it doesn't turn into a full blown project at the end. You know that's kind of where we're coming from. It's one of those things we're working on as a team as well. So you know it's not necessarily that I need this specific doc to to.
+
+Surya Jonnavithula   2:44:21
+Right.
+
+Jerry D - D2I   2:44:40
+To to to suit a need. It's more, you know, we don't want to, we don't want a black box. We want to make sure we're part of it and understand it. Every part, all the parts along the way where it makes sense, yeah.
+
+Surya Jonnavithula   2:44:50
+Sure, sure. Definitely. OK. All right. So.
+I looks like from Sai point of view he covered everything. So we have 10 minutes. What I like to do is.
+I would like to summarize what high level, right, what we understood. Of course tomorrow we'll get a detailed view, but high level. So I have one question before I say that this migration we are doing to a modern architecture.
+At a high level I understood as.
+Cost driven as well as performance driven and a future scalability driven because your your business is transforming to a data brokerage business from from analytics and the reason cost is that you're keeping all the data live in your database which is expensive.
+
+Jerry D - D2I   2:45:43
+Mhm.
+
+Surya Jonnavithula   2:45:52
+And on even more importantly, it's performance. You're unable to run the the performance bottlenecks and and and also looking at the scale, getting into the terabytes and already there and then getting even more.
+Probably it may not scale, right? And of course there are a lot more efficiencies in terms of using the modern technology so we can apply but at business level.
+Is that correct statement?
+
+Jerry D - D2I   2:46:28
+I think that summarizes it pretty well.
+
+Surya Jonnavithula   2:46:32
+OK, OK, OK.
+All right. So that's that's good. That's that's what I wanted to make sure. Sai, you you want to elaborate anything you're understanding.
+
+Sai Vootla   2:46:47
+No, sweetie. No, that's perfect.
+
+Surya Jonnavithula   2:46:50
+OK.
+OK. You, Jerry, Greg, Ricardos.
+Sushant, you have any questions?
+At this time for today.
+
+Jerry D - D2I   2:47:09
+I do not.
+
+Greg M.   2:47:09
+I mean, this was very thorough.
+
+Shashank Saran   2:47:11
+Yeah.
+
+Surya Jonnavithula   2:47:13
+OK. OK. All right. Perfect then.
+Thank you very much, gentlemen, and thank you very much for today. And we have a lot of work to do listening to it, grabbing, understanding details and put together some reflection tomorrow.
+And I would conclude there for today's session.
+
+Jerry D - D2I   2:47:35
+All right. Sounds good.
+
+Shashank Saran   2:47:36
+No.
+
+Surya Jonnavithula   2:47:38
+Thank you very much.
+
+Jerry D - D2I   2:47:40
+Thank you guys.
+
+Greg M.   2:47:40
+Thank you.
+Thank you.
+
+Jerry D - D2I   2:47:41
+Thank you.
+
+Sai Vootla   2:47:42
+Thank you.
+
+Greg M.   2:47:44
+Hi.
+
+Surya Jonnavithula stopped transcription
+

@@ -1,0 +1,15 @@
+# The main pipeline for usagm_databricks_test
+resources:
+  pipelines:
+    usagm_databricks_test_pipeline:
+      name: usagm_databricks_test_pipeline
+      ## Catalog is required for serverless compute
+      catalog: main
+      schema: usagm_databricks_test_${bundle.target}
+      serverless: true
+      libraries:
+        - notebook:
+            path: ../src/dlt_pipeline.ipynb
+
+      configuration:
+        bundle.sourcePath: ${workspace.file_path}/src
