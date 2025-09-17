@@ -1,0 +1,10 @@
+streamlit==1.28.0
+pandas
+numpy
+matplotlib
+seaborn
+plotly
+scikit-learn
+azure-storage-blob
+openai
+openpyxl
