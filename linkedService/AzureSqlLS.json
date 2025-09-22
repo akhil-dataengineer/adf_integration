@@ -1,0 +1,18 @@
+{
+	"name": "AzureSqlLS",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"type": "AzureSqlDatabase",
+		"typeProperties": {
+			"connectionString": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "KeyVaultLS",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "sql-conn-str"
+			}
+		},
+		"annotations": []
+	}
+}

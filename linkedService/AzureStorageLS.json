@@ -1,0 +1,19 @@
+{
+	"name": "AzureStorageLS",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"type": "AzureBlobFS",
+		"typeProperties": {
+			"url": "https://aienablementstorage1.dfs.core.windows.net",
+			"accountKey": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "KeyVaultLS",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "adls-key"
+			}
+		},
+		"annotations": []
+	}
+}
