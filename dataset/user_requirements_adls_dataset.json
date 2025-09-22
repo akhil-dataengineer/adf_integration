@@ -1,0 +1,21 @@
+{
+	"name": "user_requirements_adls_dataset",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureStorageLS",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "combined_output",
+				"fileSystem": "mbn-text-extraction"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

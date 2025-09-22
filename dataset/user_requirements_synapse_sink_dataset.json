@@ -1,0 +1,16 @@
+{
+	"name": "user_requirements_synapse_sink_dataset",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlLS",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"typeProperties": {
+			"schema": "dev",
+			"table": "user_requirements_nlp"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

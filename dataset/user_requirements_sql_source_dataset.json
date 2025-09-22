@@ -1,0 +1,16 @@
+{
+	"name": "user_requirements_sql_source_dataset",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlLS",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "socialbakers_facebook_post"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
