@@ -1,0 +1,21 @@
+{
+	"name": "mbn_adls_dataset",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureStorageLS",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "output/mbn",
+				"fileSystem": "social-media-analytics"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

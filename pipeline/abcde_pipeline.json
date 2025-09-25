@@ -1,0 +1,64 @@
+{
+	"name": "abcde_pipeline",
+	"properties": {
+		"activities": [
+			{
+				"name": "Run_abcde_Notebook",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/ryarapatineni@intuceo.com/abcde_pipeline"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksLS",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Copy_abcde_Data",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Run_abcde_Notebook",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "ParquetSource"
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"writeBehavior": "insert"
+					},
+					"enableStaging": false
+				}
+			}
+		],
+		"parameters": {
+			"processing_date": {
+				"type": "String",
+				"defaultValue": "2025-09-24"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2025-09-24T05:20:36Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

@@ -1,0 +1,31 @@
+{
+	"name": "abc_pipeline",
+	"properties": {
+		"activities": [
+			{
+				"name": "Run_abc_pipeline_Notebook",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/ryarapatineni@intuceo.com/abc_pipeline_notebook"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksLS",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"annotations": [
+			"Minimal pipeline for abc_pipeline (GPT-4o generation failed)"
+		],
+		"lastPublishTime": "2025-09-24T03:55:15Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}
